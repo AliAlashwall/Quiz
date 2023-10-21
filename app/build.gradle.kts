@@ -48,6 +48,11 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    configurations.all {
+        resolutionStrategy {
+            force("androidx.appcompat:appcompat:1.4.0")
+        }
+    }
 }
 
 dependencies {
@@ -79,6 +84,9 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.7.4")
     //lottie
     implementation ("com.airbnb.android:lottie-compose:4.2.0")
+    implementation ("com.airbnb.android:lottie:4.2.2")
+    implementation ("androidx.appcompat:appcompat:1.4.0")
+
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")

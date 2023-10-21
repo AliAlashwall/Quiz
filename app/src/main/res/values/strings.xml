@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Quizzard</string>
+    <string name="loading" />
 </resources>

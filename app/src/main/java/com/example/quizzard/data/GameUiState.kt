@@ -10,4 +10,5 @@ data class GameUiState(
     var listOfAnswer : List<String> = listOf(""),
     var endQuiz : Boolean = false,
     var category : String = ""
+
 )

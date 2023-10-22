@@ -58,6 +58,14 @@ class QuizViewModel :ViewModel() {
         }
         navToHome()
     }
+    fun onDailyQuizClicked(navToHome: () -> Unit){
+        _gameUiState.update {
+            it.copy(
+                category = "Daily Quiz"
+            )
+        }
+        navToHome()
+    }
     fun getQuestion() {
         viewModelScope.launch {
             val category = _gameUiState.value.category
@@ -65,20 +73,21 @@ class QuizViewModel :ViewModel() {
             quizUiState = when (category) {
                 "Sports" -> QuizUiState.Success(QuizApi.retrofitService.getSportsQuestion())
                 "Computer Science" -> QuizUiState.Success(QuizApi.retrofitService.getComputerQuestions())
-                 else-> QuizUiState.Success(QuizApi.retrofitService.getMathQuestions())
+                "Math"-> QuizUiState.Success(QuizApi.retrofitService.getMathQuestions())
+                else -> QuizUiState.Success(QuizApi.retrofitService.getDailyQuiz())
 
             }
 
         }
     }
 //-----------------//-----------------//-----------------//-----------------//-----------------//-----------------
-fun updateUserName(name:String){
-    _gameUiState.update {
-        it.copy(
-            userName = name
-        )
+    fun updateUserName(name:String){
+        _gameUiState.update {
+            it.copy(
+                userName = name
+            )
+        }
     }
-}
     @SuppressLint("SuspiciousIndentation")
     fun getQuestionDetails(questionsList : List<Question>){
         val question = questionsList[_gameUiState.value.counter]
@@ -118,6 +127,21 @@ fun updateUserName(name:String){
         _gameUiState.update {
             it.copy(
                 score = newScore
+            )
+        }
+    }
+    fun resetGame(){
+        _gameUiState.update {
+            it.copy(
+                userName = "",
+                clicked  =false,
+                score = 0,
+                counter = 0,
+                correctAnswer  = "",
+                question = "",
+                listOfAnswer  = listOf(""),
+                endQuiz  = false,
+                category = ""
             )
         }
     }

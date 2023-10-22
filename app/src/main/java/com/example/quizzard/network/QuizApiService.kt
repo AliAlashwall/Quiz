@@ -24,7 +24,10 @@ interface QuizApiService {
     @GET("api.php?amount=10&category=19&difficulty=medium")
     suspend fun getMathQuestions() : QuizData
 
-    @GET("api.php?amount=10")
+    @GET("api.php?amount=10&category=23")
+    suspend fun getHistoryQuestions() : QuizData
+
+    @GET("api.php?amount=20")
     suspend fun getDailyQuiz() : QuizData
 
 }

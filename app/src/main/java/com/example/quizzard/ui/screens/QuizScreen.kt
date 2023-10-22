@@ -55,6 +55,7 @@ fun QuizScreen(navController: NavHostController = rememberNavController()){
                     userName =gameUiState.userName,
                     score = gameUiState.score,
                     onTryAgainClicked = {navController.popBackStack(QuizScreen.Start.name, false)},
+                    listSize = gameUiState.questionListSize,
                     resetQuiz = {quizViewModel.resetGame()}
                 )
             }

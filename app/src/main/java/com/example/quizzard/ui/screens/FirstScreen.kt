@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -38,15 +40,28 @@ fun FirstScreen(
 ) {
 val gameUiState by gameViewModel.gameUiState.collectAsState()
     Column(
-        Modifier.fillMaxSize(),
+        Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState(), true),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ){
         QuizTopAppBar(name =gameUiState.userName)
 
+        Text(
+            modifier = Modifier.padding(start = 20.dp,top = 40.dp).fillMaxWidth().align(Alignment.Start),
+            text = "👉 Practice more",
+
+        )
+
         DailyQuizItem {
             gameViewModel.onDailyQuizClicked { navToHome() }
         }
+        Text(
+            modifier = Modifier.padding(start = 20.dp,top = 20.dp).fillMaxWidth().align(Alignment.Start),
+            text = "👉 Different categories",
+
+            )
         CategoryItem(
             category = "Sports",
             classNum = "A",
@@ -54,7 +69,7 @@ val gameUiState by gameViewModel.gameUiState.collectAsState()
             navToHome = {navToHome()}
         )
         CategoryItem(
-            category = "Computer Science",
+            category = "Programing",
             classNum = "B",
             onCategoryClicked = { gameViewModel.onComputerClicked{ navToHome() } },
             navToHome = {navToHome()}
@@ -63,6 +78,12 @@ val gameUiState by gameViewModel.gameUiState.collectAsState()
             category = "Math",
             classNum = "C",
             onCategoryClicked = { gameViewModel.onMathClicked { navToHome() } },
+            navToHome = {navToHome()}
+        )
+        CategoryItem(
+            category = "History",
+            classNum = "D",
+            onCategoryClicked = { gameViewModel.onHistoryClicked{ navToHome() } },
             navToHome = {navToHome()}
         )
     }
@@ -78,7 +99,6 @@ fun DailyQuizItem(
             .fillMaxWidth()
             .height(90.dp)
             .clickable { onDailyQuizClicked() },
-
         colors = CardDefaults.cardColors(Color(0xFF2E996D))
     ){
         Row(
@@ -102,7 +122,7 @@ fun DailyQuizItem(
                     textAlign = TextAlign.Center
                 )
                 Text(
-                    text ="10 Mixed questions",
+                    text ="20 Mixed questions",
                     Modifier.padding(start = 4.dp),
                     color = Color.White,
                 )

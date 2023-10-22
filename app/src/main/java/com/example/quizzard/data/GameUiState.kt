@@ -9,6 +9,7 @@ data class GameUiState(
     var question: String = "",
     var listOfAnswer : List<String> = listOf(""),
     var endQuiz : Boolean = false,
-    var category : String = ""
+    var category : String = "",
+    var questionListSize : Int = 10
 
 )

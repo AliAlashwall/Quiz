@@ -70,6 +70,7 @@ fun GameScreen(
    quizViewModel : QuizViewModel,
     navToFinalScreen : () ->Unit
 ){
+
     quizViewModel.getQuestionDetails(questionList)
     val gameUiState by quizViewModel.gameUiState.collectAsState()
 
@@ -88,10 +89,10 @@ fun GameScreen(
             clicked = gameUiState.clicked,
             score = gameUiState.score,
             counter = gameUiState.counter,
+            listSize = gameUiState.questionListSize,
             onNextClick = { quizViewModel.onNextClick(navToFinalScreen) }
         )
     }
-
 }
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -105,11 +106,12 @@ fun GameLayout(
     clicked: Boolean,
     score : Int,
     counter : Int,
+    listSize : Int,
     onNextClick: () -> Unit
 ) {
     val shuffledListAnswer = remember(listAnswer) { listAnswer.shuffled() }
     Scaffold(
-        topBar = { HomeTopAppBar(gameUiState.category, score) }
+        topBar = { HomeTopAppBar(gameUiState.category, score, listSize) }
     ) {paddingValues ->
         Column(
             modifier = Modifier
@@ -119,7 +121,7 @@ fun GameLayout(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            QuestionCard(question, counter)
+            QuestionCard(question, counter, listSize)
             Spacer(modifier = Modifier.height(25.dp))
 
             AnswersList(
@@ -129,15 +131,16 @@ fun GameLayout(
                 onItemClicked = { quizViewModel.onItemClicked() },
                 incScore = { quizViewModel.incScore() }
             )
-
-            Button(onClick = { onNextClick() })
+            Spacer(modifier = Modifier.weight(1f))
+            Button(
+                onClick = { onNextClick() },
+                modifier = Modifier
+                    .padding(bottom = 20.dp)
+                    .width(300.dp)
+            )
             {
-                Text(text = "Next")
+                Text(text = "Next Question")
             }
-
-//            Text(
-//                text = " SCORE : $score",
-//            )
         }
     }
 }
@@ -145,7 +148,8 @@ fun GameLayout(
 @Composable
 fun QuestionCard(
     question : String,
-    counter : Int
+    counter : Int,
+    listSize : Int
 ){
     Card(
         modifier = Modifier
@@ -162,7 +166,7 @@ fun QuestionCard(
                     .background(Color(0xFFF6D1AB))
                     .padding(horizontal = 10.dp, vertical = 4.dp)
                     .align(alignment = Alignment.End),
-                text = "${counter +1}/10",
+                text = "${counter +1}/$listSize",
                 fontSize = 20.sp,
                 color = Color(0xFFFFFFFF),
                 textAlign = TextAlign.End
@@ -170,7 +174,8 @@ fun QuestionCard(
             Text(
                 modifier = Modifier
                     .padding(vertical = 20.dp)
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .height(80.dp),
                 text = question,
                 textAlign = TextAlign.Start,
                 color = Color(0xff642900),
@@ -260,12 +265,18 @@ fun LoadingScreen(modifier: Modifier) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeTopAppBar(category : String = "Math", score : Int){
+fun HomeTopAppBar(
+    category : String,
+    score : Int,
+    listSize : Int
+){
     CenterAlignedTopAppBar(
         title = {
             Column{
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .padding(bottom = 5.dp)
+                        .fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center
                 ) {
@@ -273,6 +284,7 @@ fun HomeTopAppBar(category : String = "Math", score : Int){
                         text = "$category Quiz",
                         fontWeight = FontWeight.Bold,
                         fontSize = 24.sp,
+                        textAlign = TextAlign.Center,
                         color = Color(0xff642900)
                     )
                 }
@@ -306,7 +318,7 @@ fun HomeTopAppBar(category : String = "Math", score : Int){
                         fontWeight = FontWeight.SemiBold
                     )
                     Text(
-                        text = "/10",
+                        text = "/$listSize",
                         color = Color(0xFFEB8844),
                         fontSize = 18.sp,
                     )
@@ -332,6 +344,7 @@ fun HomePreview(){
             clicked = gameUiState.clicked,
             score = gameUiState.score,
             counter = gameUiState.counter,
+            listSize = 10,
             onNextClick = {}
         )
 

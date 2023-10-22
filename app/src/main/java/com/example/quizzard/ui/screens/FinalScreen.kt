@@ -31,6 +31,7 @@ fun FinalScreen(
     userName : String,
     score: Int,
     onTryAgainClicked : () -> Unit,
+    listSize : Int,
     resetQuiz : () ->Unit
 ) {
     Column(
@@ -53,7 +54,7 @@ fun FinalScreen(
             fontWeight = FontWeight.Bold
         )
         Text(
-            text = "Score : $score/10",
+            text = "Score : $score/$listSize",
             fontSize =30.sp,
             fontWeight = FontWeight.Bold
         )
@@ -79,8 +80,7 @@ fun FinalScreen(
 @Composable
 fun FinalPreview(){
     QuizzardTheme{
-        FinalScreen("Ali", 5,{}) {
-
+        FinalScreen("Ali", 5,{},10) {
         }
     }
 }

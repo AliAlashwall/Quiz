@@ -30,25 +30,29 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.airbnb.lottie.compose.*
+import com.example.quizzard.QuizViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StartScreen(
+    quizViewModel: QuizViewModel = viewModel(),
     onNextClicked : ()-> Unit,
 ) {
-    var temp by remember {
-        mutableStateOf("")
-    }
+    val gameUiState by quizViewModel.gameUiState.collectAsState()
+
     val focusManager = LocalFocusManager.current
+    var uName by remember { mutableStateOf("") }
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ){
-
             Row(
-                modifier = Modifier.padding(top =60.dp, bottom = 200.dp).size(200.dp),
+                modifier = Modifier
+                    .padding(top = 60.dp, bottom = 200.dp)
+                    .size(200.dp),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ){
@@ -58,9 +62,10 @@ fun StartScreen(
 //        Spacer(modifier = Modifier.height(200.dp))
 
         OutlinedTextField(
-            value = temp,
-            onValueChange = {
-                temp = it
+            value = gameUiState.userName,
+            onValueChange = {name ->
+                quizViewModel.updateUserName(name)
+                uName = name
             },
             singleLine = true,
             shape = MaterialTheme.shapes.large,
@@ -75,12 +80,16 @@ fun StartScreen(
                 imeAction = ImeAction.Done
             ),
             keyboardActions = KeyboardActions(
-                onDone = { focusManager.clearFocus()}
+                onDone = {
+                    focusManager.clearFocus()
+                    quizViewModel.updateUserName(uName)
+                }
             )
         )
         Button(
             onClick = {
                 onNextClicked()
+
             },
             modifier = Modifier
                 .wrapContentSize()

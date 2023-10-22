@@ -22,6 +22,12 @@ interface QuizUiState{
     data class Success(val question: QuizData) : QuizUiState
 //    object Error
 }
+//enum class Category{
+//    Daily,
+//    Math,
+//    Sports,
+//    Programing
+//}
 
 class QuizViewModel :ViewModel() {
     var quizUiState: QuizUiState by mutableStateOf(QuizUiState.Loading)
@@ -30,23 +36,25 @@ class QuizViewModel :ViewModel() {
     private val _gameUiState = MutableStateFlow(GameUiState())
     val gameUiState : StateFlow<GameUiState> = _gameUiState.asStateFlow()
 
-    init {
-        getQuestion()
-    }
+//    init {
+//        getQuestion()
+//    }
     fun onSportClicked(navToHome :()->Unit) {
         _gameUiState.update {
             it.copy(
                 category = "Sports"
             )
         }
+        getQuestion()
         navToHome()
     }
     fun onComputerClicked(navToHome :()->Unit) {
         _gameUiState.update {
             it.copy(
-                category = "Computer Science"
+                category = "Programing"
             )
         }
+        getQuestion()
         navToHome()
     }
 
@@ -56,31 +64,44 @@ class QuizViewModel :ViewModel() {
                 category = "Math"
             )
         }
+        getQuestion()
         navToHome()
     }
-    fun onDailyQuizClicked(navToHome: () -> Unit){
-        _gameUiState.update {
-            it.copy(
-                category = "Daily Quiz"
-            )
+     fun onDailyQuizClicked(navToHome: () -> Unit){
+        viewModelScope.launch {
+            _gameUiState.update {
+                it.copy(
+                    category = "Daily"
+                )
+            }
+            getQuestion()
+            navToHome()
         }
-        navToHome()
     }
-    fun getQuestion() {
+    fun onHistoryClicked(navToHome: () -> Unit){
+        viewModelScope.launch {
+            _gameUiState.update {
+                it.copy(
+                    category = "History"
+                )
+            }
+            getQuestion()
+            navToHome()
+        }
+    }
+    private fun getQuestion() {
         viewModelScope.launch {
             val category = _gameUiState.value.category
-
             quizUiState = when (category) {
-                "Sports" -> QuizUiState.Success(QuizApi.retrofitService.getSportsQuestion())
-                "Computer Science" -> QuizUiState.Success(QuizApi.retrofitService.getComputerQuestions())
                 "Math"-> QuizUiState.Success(QuizApi.retrofitService.getMathQuestions())
-                else -> QuizUiState.Success(QuizApi.retrofitService.getDailyQuiz())
-
+                "Daily" -> QuizUiState.Success(QuizApi.retrofitService.getDailyQuiz())
+                "Programing" -> QuizUiState.Success(QuizApi.retrofitService.getComputerQuestions())
+                "Sports" -> QuizUiState.Success(QuizApi.retrofitService.getSportsQuestion())
+                "History" -> QuizUiState.Success(QuizApi.retrofitService.getHistoryQuestions())
+                else -> QuizUiState.Loading
             }
-
         }
     }
-//-----------------//-----------------//-----------------//-----------------//-----------------//-----------------
     fun updateUserName(name:String){
         _gameUiState.update {
             it.copy(
@@ -91,18 +112,20 @@ class QuizViewModel :ViewModel() {
     @SuppressLint("SuspiciousIndentation")
     fun getQuestionDetails(questionsList : List<Question>){
         val question = questionsList[_gameUiState.value.counter]
-            _gameUiState.update {
-                it.copy(
-                    question = Jsoup.parse(question.question).text(),
-                    listOfAnswer = (question.incorrectAnswers + question.correctAnswer),
-                    correctAnswer = question.correctAnswer
-                )
-            }
+        _gameUiState.update {
+            it.copy(
+                question = Jsoup.parse(question.question).text(),
+                listOfAnswer = (question.incorrectAnswers + question.correctAnswer).map {answer -> Jsoup.parse(answer).text() },
+                correctAnswer = question.correctAnswer,
+                questionListSize = questionsList.size
+            )
+        }
     }
     fun onNextClick(navToEnd : ()->Unit){
         var incCounter =_gameUiState.value.counter.plus(1)
-        if (incCounter == 10){incCounter = 9}
-        val endGame = _gameUiState.value.counter == 9
+        val listSize = _gameUiState.value.questionListSize
+        if (incCounter == listSize){incCounter = (listSize - 1)}
+        val endGame = _gameUiState.value.counter == listSize - 1
         _gameUiState.update {
             it.copy(
                 clicked = false,

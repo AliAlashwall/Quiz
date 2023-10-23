@@ -46,7 +46,7 @@ fun FinalScreen(
             fontSize =30.sp,
             fontWeight = FontWeight.Bold
         )
-        Spacer(modifier = Modifier.height(140.dp))
+        Spacer(modifier = Modifier.height(100.dp))
 
         Text(modifier = Modifier.padding(vertical = 20.dp),
             text = "Name : $userName",
@@ -64,8 +64,8 @@ fun FinalScreen(
                 onTryAgainClicked()
                 resetQuiz()
                       },
-            modifier = Modifier.padding(top = 60.dp, end = 50.dp, start = 50.dp).fillMaxWidth(),
-            colors = ButtonDefaults.buttonColors(Color(0xFF2E996D))
+            modifier = Modifier.padding(top = 60.dp, end = 50.dp, start = 50.dp, bottom = 20.dp).fillMaxWidth(),
+            colors = ButtonDefaults.buttonColors(Color(0xFFF6D1AB))
         ) {
             Text(
                 text = "Try Again !",

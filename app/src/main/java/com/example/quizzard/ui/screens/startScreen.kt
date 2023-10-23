@@ -28,7 +28,9 @@ import androidx.compose.animation.core.*
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.*
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.airbnb.lottie.compose.*
@@ -51,7 +53,7 @@ fun StartScreen(
     ){
             Row(
                 modifier = Modifier
-                    .padding(top = 60.dp, bottom = 200.dp)
+                    .padding(top = 60.dp, bottom = 160.dp)
                     .size(200.dp),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
@@ -59,7 +61,6 @@ fun StartScreen(
                 LottieAnimationExample()
             }
 
-//        Spacer(modifier = Modifier.height(200.dp))
 
         OutlinedTextField(
             value = gameUiState.userName,
@@ -75,7 +76,6 @@ fun StartScreen(
             label = {
                 Text("Enter your name")
             },
-//            isError = isGuessWrong,
             keyboardOptions = KeyboardOptions.Default.copy(
                 imeAction = ImeAction.Done
             ),
@@ -93,8 +93,9 @@ fun StartScreen(
             },
             modifier = Modifier
                 .wrapContentSize()
-                .padding(top = 30.dp)
-                .width(300.dp)
+                .padding(top = 50.dp)
+                .width(300.dp),
+            colors = ButtonDefaults.buttonColors(Color(0xFFF6D1AB))
         ) {
             Text(text = "Start Quiz")
         }

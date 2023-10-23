@@ -137,6 +137,21 @@ class QuizViewModel :ViewModel() {
             navToEnd()
         }
     }
+    fun backToHome(navToHome: () -> Unit){
+        _gameUiState.update {
+            it.copy(
+                clicked  =false,
+                score = 0,
+                counter = 0,
+                correctAnswer  = "",
+                question = "",
+                listOfAnswer  = listOf(""),
+                endQuiz  = false,
+                category = ""
+            )
+        }
+        navToHome()
+    }
     fun onItemClicked(){
         _gameUiState.update {
             it.copy(
@@ -168,5 +183,6 @@ class QuizViewModel :ViewModel() {
             )
         }
     }
+
 }
 

@@ -34,7 +34,7 @@ import com.example.quizzard.QuizViewModel
 import com.example.quizzard.R
 
 @Composable
-fun FirstScreen(
+fun CategorySelection(
     gameViewModel: QuizViewModel,
     navToHome : ()->Unit
 ) {
@@ -49,8 +49,9 @@ val gameUiState by gameViewModel.gameUiState.collectAsState()
         QuizTopAppBar(name =gameUiState.userName)
 
         Text(
-            modifier = Modifier.padding(start = 20.dp,top = 40.dp).fillMaxWidth().align(Alignment.Start),
+            modifier = Modifier.padding(start = 20.dp,top = 30.dp).fillMaxWidth().align(Alignment.Start),
             text = "👉 Practice more",
+            fontWeight = FontWeight.Bold
 
         )
 
@@ -58,9 +59,9 @@ val gameUiState by gameViewModel.gameUiState.collectAsState()
             gameViewModel.onDailyQuizClicked { navToHome() }
         }
         Text(
-            modifier = Modifier.padding(start = 20.dp,top = 20.dp).fillMaxWidth().align(Alignment.Start),
-            text = "👉 Different categories",
-
+            modifier = Modifier.padding(start = 20.dp,top = 10.dp).fillMaxWidth().align(Alignment.Start),
+            text = "👉 Specific category",
+            fontWeight = FontWeight.Bold
             )
         CategoryItem(
             category = "Sports",
@@ -178,7 +179,7 @@ fun CategoryItem(
 ){
     Card(
         modifier = Modifier
-            .padding(20.dp)
+            .padding(20.dp, 10.dp)
             .fillMaxWidth()
             .height(70.dp)
             .clickable {
@@ -233,5 +234,5 @@ fun CategoryItem(
 @Composable
 fun FirstPrev(){
     val gameViewModel: QuizViewModel = viewModel()
-    FirstScreen(gameViewModel){}
+    CategorySelection(gameViewModel){}
 }

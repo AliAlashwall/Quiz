@@ -20,30 +20,32 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme.shapes
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.unit.times
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.quizzard.QuizUiState
 import com.example.quizzard.QuizViewModel
@@ -55,11 +57,14 @@ import com.example.quizzard.ui.theme.QuizzardTheme
 @Composable
 fun HomeScreen(
     quizViewModel : QuizViewModel,
-    navToFinalScreen : () ->Unit
+    navToFinalScreen : () ->Unit,
+    navBack : () ->Unit
 ) {
 
     when(val quizUiState = quizViewModel.quizUiState){
-        is QuizUiState.Success -> GameScreen(quizUiState.question.results, quizViewModel, navToFinalScreen)
+        is QuizUiState.Success -> GameScreen(quizUiState.question.results, quizViewModel, navToFinalScreen
+                                  ) { quizViewModel.backToHome { navBack() } }
+
         is QuizUiState.Loading -> LoadingScreen(modifier = Modifier.fillMaxSize())
     }
 }
@@ -68,7 +73,8 @@ fun HomeScreen(
 fun GameScreen(
     questionList: List<Question>,
    quizViewModel : QuizViewModel,
-    navToFinalScreen : () ->Unit
+    navToFinalScreen : () ->Unit,
+    navBack: () -> Unit
 ){
 
     quizViewModel.getQuestionDetails(questionList)
@@ -90,12 +96,12 @@ fun GameScreen(
             score = gameUiState.score,
             counter = gameUiState.counter,
             listSize = gameUiState.questionListSize,
-            onNextClick = { quizViewModel.onNextClick(navToFinalScreen) }
+            onNextClick = { quizViewModel.onNextClick(navToFinalScreen) },
+            navBack = {navBack()}
         )
     }
 }
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GameLayout(
     question : String,
@@ -107,21 +113,22 @@ fun GameLayout(
     score : Int,
     counter : Int,
     listSize : Int,
-    onNextClick: () -> Unit
+    onNextClick: () -> Unit,
+    navBack: () -> Unit
 ) {
     val shuffledListAnswer = remember(listAnswer) { listAnswer.shuffled() }
-    Scaffold(
-        topBar = { HomeTopAppBar(gameUiState.category, score, listSize) }
-    ) {paddingValues ->
+
         Column(
             modifier = Modifier
-                .padding(paddingValues)
+//                .padding(paddingValues)
                 .fillMaxSize(),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            HomeTopAppBar(gameUiState.category, score, listSize, navBack)
 
             QuestionCard(question, counter, listSize)
+
             Spacer(modifier = Modifier.height(25.dp))
 
             AnswersList(
@@ -132,33 +139,73 @@ fun GameLayout(
                 incScore = { quizViewModel.incScore() }
             )
             Spacer(modifier = Modifier.weight(1f))
-            Button(
+/*            Button(
                 onClick = { onNextClick() },
                 modifier = Modifier
                     .padding(bottom = 20.dp)
-                    .width(300.dp)
+                    .width(300.dp),
+                colors = ButtonDefaults.buttonColors(Color(0xFFF6D1AB))
             )
             {
-                Text(text = "Next Question")
+                Text(
+                    text = "Next Question",
+                    fontSize = 18.sp
+                )
+            }*/
+            Button(
+                onClick = { onNextClick() },
+                modifier = Modifier
+                    .padding(vertical = 20.dp)
+                    .height(40.dp)
+                    .width(280.dp),
+                colors = ButtonDefaults.buttonColors(Color(0xFFF6D1AB))
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(
+                            color = Color(0xFFF6D1AB) // Set your desired background color here
+                        )
+                ) {
+                    Image(
+                        painter = painterResource(R.drawable.group_3),
+                        contentDescription = null,
+                        modifier = Modifier.fillMaxWidth(),
+                        contentScale = ContentScale.Crop,
+                    )
+                    Text(
+                        text = "Next Question",
+                        fontSize = 18.sp,
+                        color = Color.White,
+                        modifier = Modifier.fillMaxSize(),
+                        textAlign = TextAlign.Center
+                    )
+                }
             }
         }
-    }
+
 }
 
 @Composable
 fun QuestionCard(
-    question : String,
-    counter : Int,
-    listSize : Int
-){
+    question : String = "The Rio 2016 Summer olympics held it's closing ceremony on what date",
+    counter : Int=1,
+    listSize : Int=10
+)
+{
+    var textSize by remember { mutableStateOf(20.sp) }
+    if (question.length > 120) textSize = 18.sp else 20.sp
     Card(
+
         modifier = Modifier
-            .size(350.dp, 200.dp),
+            .padding(start = 20.dp, end = 10.dp)
+            .size(350.dp, 160.dp),
         colors = CardDefaults.cardColors(Color.Unspecified),
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
                 modifier = Modifier
@@ -166,25 +213,30 @@ fun QuestionCard(
                     .background(Color(0xFFF6D1AB))
                     .padding(horizontal = 10.dp, vertical = 4.dp)
                     .align(alignment = Alignment.End),
-                text = "${counter +1}/$listSize",
+                text = "${counter + 1}/$listSize",
                 fontSize = 20.sp,
                 color = Color(0xFFFFFFFF),
                 textAlign = TextAlign.End
             )
-            Text(
-                modifier = Modifier
-                    .padding(vertical = 20.dp)
-                    .fillMaxWidth()
-                    .height(80.dp),
-                text = question,
-                textAlign = TextAlign.Start,
-                color = Color(0xff642900),
-                fontWeight = FontWeight.Bold,
-                fontSize = 25.sp
-            )
+            Row(
+                modifier = Modifier.fillMaxSize(),
+                verticalAlignment = Alignment.CenterVertically
+            ){
+                Text(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    text = question,
+                    textAlign = TextAlign.Start,
+                    color = Color(0xff642900),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = textSize,
+                    lineHeight = 28.sp
+                )
+            }
         }
     }
 }
+
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun AnswerItem(
@@ -216,7 +268,10 @@ fun AnswerItem(
         } else CardDefaults.cardColors(Color.Unspecified),
         border = BorderStroke(1.dp, Color.LightGray),
     ) {
-        Row(modifier = Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically) {
+        Row(
+            modifier = Modifier.fillMaxSize(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             Text(
                 text = "${(listAnswer.indexOf(possibleAnswer) + 1)}.",
                 Modifier.padding(horizontal = 10.dp)
@@ -237,7 +292,7 @@ fun AnswersList(
     incScore : ()->Unit
 ,){
     LazyColumn(
-        verticalArrangement = Arrangement.spacedBy(30.dp)
+        verticalArrangement = Arrangement.spacedBy(20.dp)
     ){
         items(listAnswer){possibleAnswer ->
 
@@ -262,71 +317,71 @@ fun LoadingScreen(modifier: Modifier) {
     )
 }
 
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeTopAppBar(
     category : String,
     score : Int,
-    listSize : Int
+    listSize : Int,
+    navBack: () -> Unit
 ){
-    CenterAlignedTopAppBar(
-        title = {
-            Column{
-                Row(
-                    modifier = Modifier
-                        .padding(bottom = 5.dp)
-                        .fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Text(
-                        text = "$category Quiz",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 24.sp,
-                        textAlign = TextAlign.Center,
-                        color = Color(0xff642900)
-                    )
-                }
+    val fac = if (listSize == 10) 40.dp else 20.dp
+    Column (
+        modifier = Modifier
+            .padding(horizontal = 10.dp)
+            .fillMaxWidth(),
+        verticalArrangement = Arrangement.Center
+    ){
+            Row(
+                modifier = Modifier
+                    .padding(top = 15.dp, bottom = 10.dp)
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Start
+            ) {
+                Icon(
+                    painterResource(id = R.drawable.baseline_arrow_back_ios_24),
+                    null,
+                    modifier = Modifier.clickable { navBack() }
+                )
+                Spacer(modifier = Modifier.weight(1f))
+                Text(
+                    text = "$category Quiz",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 24.sp,
+                    textAlign = TextAlign.Center,
+                    color = Color(0xff642900)
+                )
+                Spacer(modifier = Modifier.weight(1f))
+            }
 
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Start
-                ) {
-                    when(score){
-                        1 -> StretchableLine(40.dp)
-                        2 -> StretchableLine(80.dp)
-                        3 -> StretchableLine(120.dp)
-                        4 -> StretchableLine(160.dp)
-                        5 -> StretchableLine(200.dp)
-                        6 -> StretchableLine(240.dp)
-                        7 -> StretchableLine(280.dp)
-                        8 -> StretchableLine(320.dp)
-                        9 -> StretchableLine(360.dp)
-                        10-> StretchableLine(400.dp)
-                    }
-                }
-                Row(
-                    modifier = Modifier,
-                    horizontalArrangement = Arrangement.Start,
-                    verticalAlignment = Alignment.CenterVertically
-                ){
-                    Text(
-                        text = "$score",
-                        color = Color(0xFF2E996D),
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.SemiBold
-                    )
-                    Text(
-                        text = "/$listSize",
-                        color = Color(0xFFEB8844),
-                        fontSize = 18.sp,
-                    )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Start
+            ) {
+                when (score) {
+                    in 0..10 -> StretchableLine(score * fac)
+
                 }
             }
-        },
-        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(Color.Unspecified)
-    )
+            Row(
+                modifier = Modifier,
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "$score",
+                    color = Color(0xFF2E996D),
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.SemiBold
+                )
+                Text(
+                    text = "/$listSize",
+                    color = Color(0xFFEB8844),
+                    fontSize = 18.sp,
+                )
+            }
+        }
+
 }
 
 @Preview(showSystemUi = true)
@@ -345,7 +400,8 @@ fun HomePreview(){
             score = gameUiState.score,
             counter = gameUiState.counter,
             listSize = 10,
-            onNextClick = {}
+            onNextClick = {},
+            {}
         )
 
     }
@@ -360,7 +416,7 @@ fun StretchableLine(
         Modifier
             .fillMaxWidth()
             .height(10.dp)
-            .background(color = Color(0x80F6D1AB), RoundedCornerShape(10.dp))
+            .background(color = Color(0x66F6D1AB), RoundedCornerShape(10.dp))
     ){
         Box(
             modifier = Modifier

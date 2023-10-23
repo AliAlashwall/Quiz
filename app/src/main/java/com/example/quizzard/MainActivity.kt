@@ -21,13 +21,8 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     QuizScreen()
-//                    val quizViewModel : QuizViewModel = viewModel()
-//                    HomeScreen(
-//                          quizViewModel){}
-
 
                 }
-//                startScreen {}
             }
         }
     }

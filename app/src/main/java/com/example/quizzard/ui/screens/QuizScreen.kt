@@ -1,6 +1,7 @@
 package com.example.quizzard.ui.screens
 
 import android.annotation.SuppressLint
+import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -56,5 +57,7 @@ fun QuizScreen(navController: NavHostController = rememberNavController()){
             )
         }
     }
+    BackHandler {
 
+    }
 }

@@ -222,7 +222,7 @@ fun AnswerItem(
             .fillMaxWidth()
             .height(70.dp)
             .clickable {
-                if (!clicked){
+                if (!clicked) {
                     onItemClicked()
                     if (possibleAnswer == correctAnswer) {
                         incScore()

@@ -65,7 +65,7 @@ fun FinalScreen(
                 resetQuiz()
                       },
             modifier = Modifier.padding(top = 60.dp, end = 50.dp, start = 50.dp, bottom = 20.dp).fillMaxWidth(),
-            colors = ButtonDefaults.buttonColors(Color(0xFFF6D1AB))
+            colors = ButtonDefaults.buttonColors(Color(0xFFF3BB81))
         ) {
             Text(
                 text = "Try Again !",

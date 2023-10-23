@@ -38,7 +38,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -118,71 +117,41 @@ fun GameLayout(
 ) {
     val shuffledListAnswer = remember(listAnswer) { listAnswer.shuffled() }
 
-        Column(
+    Column(
+        modifier = Modifier
+            .fillMaxSize(),
+        verticalArrangement = Arrangement.Top,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        HomeTopAppBar(gameUiState.category, score, listSize, navBack)
+
+        QuestionCard(question, counter, listSize)
+
+        Spacer(modifier = Modifier.height(25.dp))
+
+        AnswersList(
+            listAnswer = shuffledListAnswer,
+            correctAnswer = correctAnswer,
+            clicked = clicked,
+            onItemClicked = { quizViewModel.onItemClicked() },
+            incScore = { quizViewModel.incScore() }
+        )
+        Spacer(modifier = Modifier.weight(1f))
+        Button(
+            onClick = { onNextClick() },
             modifier = Modifier
-//                .padding(paddingValues)
-                .fillMaxSize(),
-            verticalArrangement = Arrangement.Top,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            HomeTopAppBar(gameUiState.category, score, listSize, navBack)
-
-            QuestionCard(question, counter, listSize)
-
-            Spacer(modifier = Modifier.height(25.dp))
-
-            AnswersList(
-                listAnswer = shuffledListAnswer,
-                correctAnswer = correctAnswer,
-                clicked = clicked,
-                onItemClicked = { quizViewModel.onItemClicked() },
-                incScore = { quizViewModel.incScore() }
+                .padding(bottom = 20.dp)
+                .width(280.dp),
+            colors = ButtonDefaults.buttonColors(Color(0xFFF3BB81))
+        )
+        {
+            Text(
+                text = "Next Question",
+                fontSize = 18.sp,
+                textAlign = TextAlign.Center
             )
-            Spacer(modifier = Modifier.weight(1f))
-/*            Button(
-                onClick = { onNextClick() },
-                modifier = Modifier
-                    .padding(bottom = 20.dp)
-                    .width(300.dp),
-                colors = ButtonDefaults.buttonColors(Color(0xFFF6D1AB))
-            )
-            {
-                Text(
-                    text = "Next Question",
-                    fontSize = 18.sp
-                )
-            }*/
-            Button(
-                onClick = { onNextClick() },
-                modifier = Modifier
-                    .padding(vertical = 20.dp)
-                    .height(40.dp)
-                    .width(280.dp),
-                colors = ButtonDefaults.buttonColors(Color(0xFFF6D1AB))
-            ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(
-                            color = Color(0xFFF6D1AB) // Set your desired background color here
-                        )
-                ) {
-                    Image(
-                        painter = painterResource(R.drawable.group_3),
-                        contentDescription = null,
-                        modifier = Modifier.fillMaxWidth(),
-                        contentScale = ContentScale.Crop,
-                    )
-                    Text(
-                        text = "Next Question",
-                        fontSize = 18.sp,
-                        color = Color.White,
-                        modifier = Modifier.fillMaxSize(),
-                        textAlign = TextAlign.Center
-                    )
-                }
-            }
         }
+    }
 
 }
 

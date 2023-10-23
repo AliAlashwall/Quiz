@@ -129,9 +129,11 @@ fun DailyQuizItem(
                 )
             }
             Icon(
-                modifier = Modifier,
-                painter = painterResource(id = R.drawable.baseline_arrow_forward_ios_white),
-                contentDescription =null )
+                modifier = Modifier.size(20.dp),
+                painter = painterResource(id = R.drawable.baseline_arrow_forward_ios_24),
+                contentDescription =null,
+                tint = Color.White
+            )
         }
     }
 }

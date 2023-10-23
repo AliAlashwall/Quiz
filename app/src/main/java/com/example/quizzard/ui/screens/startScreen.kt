@@ -95,7 +95,7 @@ fun StartScreen(
                 .wrapContentSize()
                 .padding(top = 50.dp)
                 .width(300.dp),
-            colors = ButtonDefaults.buttonColors(Color(0xFFF6D1AB))
+            colors = ButtonDefaults.buttonColors(Color(0xFFF3BB81))
         ) {
             Text(text = "Start Quiz")
         }

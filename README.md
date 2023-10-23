@@ -15,11 +15,7 @@ This is a Quiz Application built using Jetpack Compose, designed to test your kn
 ## Screenshot 📸
 
 <div align="center">
-  <img src="https://github.com/AliAlashwall/QuizMaster/assets/108752479/36480346-d25f-4b2d-a39e-fa68f7464ee4" style="width: 200px" alt="Screenshot 1">    <img src="https://github.com/AliAlashwall/QuizMaster/assets/108752479/9730eab3-7f0b-4d66-9d3b-09273984b697
-" style="width: 200px" alt="Screenshot 2">    <img src="https://github.com/AliAlashwall/QuizMaster/assets/108752479/7189d97b-5476-4f4a-bcb5-b24a643156e8
-" style="width: 200px" alt="Screenshot 3">    <img src="https://github.com/AliAlashwall/QuizMaster/assets/108752479/82781423-ba10-4720-be15-1b6811defb02
-
-" style="width: 200px" alt="Screenshot 4">
+  <img src="https://github.com/AliAlashwall/QuizMaster/assets/108752479/36480346-d25f-4b2d-a39e-fa68f7464ee4" style="width: 200px" alt="Screenshot 1">    <img src="https://github.com/AliAlashwall/QuizMaster/assets/108752479/9730eab3-7f0b-4d66-9d3b-09273984b697" style="width: 200px" alt="Screenshot 2">    <img src="https://github.com/AliAlashwall/QuizMaster/assets/108752479/7189d97b-5476-4f4a-bcb5-b24a643156e8" style="width: 200px" alt="Screenshot 3">    <img src="https://github.com/AliAlashwall/QuizMaster/assets/108752479/82781423-ba10-4720-be15-1b6811defb02" style="width: 200px" alt="Screenshot 4">
 </div>
 
 ## Getting Started 🚀

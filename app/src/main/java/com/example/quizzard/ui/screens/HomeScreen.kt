@@ -222,16 +222,18 @@ fun AnswerItem(
             .fillMaxWidth()
             .height(70.dp)
             .clickable {
-                onItemClicked()
-                if (possibleAnswer == correctAnswer) {
-                    incScore()
+                if (!clicked){
+                    onItemClicked()
+                    if (possibleAnswer == correctAnswer) {
+                        incScore()
+                    }
                 }
             },
         colors =
         if(clicked){
             if (possibleAnswer == correctAnswer) {
                 CardDefaults.cardColors(Color(0xFF2E996D))
-        }   else {
+        }  else {
                 CardDefaults.cardColors(Color(0xFFEB8844))
             }
         } else CardDefaults.cardColors(Color.Unspecified),

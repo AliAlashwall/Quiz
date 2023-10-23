@@ -16,9 +16,9 @@ This is a Quiz Application built using Jetpack Compose, designed to test your kn
 
 <div align="center">
   <img src="https://github.com/AliAlashwall/QuizMaster/assets/108752479/36480346-d25f-4b2d-a39e-fa68f7464ee4" style="width: 200px" alt="Screenshot 1">  
-  ![image](https://github.com/AliAlashwall/QuizMaster/assets/108752479/cd503ee8-812b-4a46-aab2-d36b9a90b048)
-  ![image](https://github.com/AliAlashwall/QuizMaster/assets/108752479/85307742-0cbe-488b-a3f3-94a7824d5631)
-  ![image](https://github.com/AliAlashwall/QuizMaster/assets/108752479/fb861615-f9b6-4f90-912e-c88c0b6e1412)
+  <img src = "https://github.com/AliAlashwall/QuizMaster/assets/108752479/cd503ee8-812b-4a46-aab2-d36b9a90b048" style="width: 200px" alt="Screenshot 2">  
+  <img src = "https://github.com/AliAlashwall/QuizMaster/assets/108752479/85307742-0cbe-488b-a3f3-94a7824d5631"  style="width: 200px" alt="Screenshot 3">  
+  <img src = "https://github.com/AliAlashwall/QuizMaster/assets/108752479/fb861615-f9b6-4f90-912e-c88c0b6e1412"  style="width: 200px" alt="Screenshot 4">  
 </div>
 
 ## Getting Started 🚀

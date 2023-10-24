@@ -89,7 +89,6 @@ fun StartScreen(
         Button(
             onClick = {
                 onNextClicked()
-
             },
             modifier = Modifier
                 .wrapContentSize()
@@ -99,7 +98,6 @@ fun StartScreen(
         ) {
             Text(text = "Start Quiz")
         }
-
     }
 }
 

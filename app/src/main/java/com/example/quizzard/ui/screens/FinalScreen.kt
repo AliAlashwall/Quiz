@@ -1,6 +1,8 @@
 package com.example.quizzard.ui.screens
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -48,31 +50,42 @@ fun FinalScreen(
         )
         Spacer(modifier = Modifier.height(100.dp))
 
-        Text(modifier = Modifier.padding(vertical = 20.dp),
-            text = "Name : $userName",
-            fontSize =30.sp,
-            fontWeight = FontWeight.Bold
-        )
-        Text(
-            text = "Score : $score/$listSize",
-            fontSize =30.sp,
-            fontWeight = FontWeight.Bold
-        )
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
+            LottieAnimationCeleb()
+            Column(horizontalAlignment = Alignment.CenterHorizontally){
+                Text(
+                    modifier = Modifier.padding(vertical = 20.dp),
+                    text = "Name : $userName",
+                    fontSize = 30.sp,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = "Score : $score/$listSize",
+                    fontSize = 30.sp,
+                    fontWeight = FontWeight.Bold
+                )
 
-        Button(
-            onClick = {
-                onTryAgainClicked()
-                resetQuiz()
-                      },
-            modifier = Modifier.padding(top = 60.dp, end = 50.dp, start = 50.dp, bottom = 20.dp).fillMaxWidth(),
-            colors = ButtonDefaults.buttonColors(Color(0xFFF3BB81))
-        ) {
-            Text(
-                text = "Try Again !",
-                fontSize = 20.sp
-            )
+                Button(
+                    onClick = {
+                        onTryAgainClicked()
+                        resetQuiz()
+                    },
+                    modifier = Modifier
+                        .padding(top = 60.dp, end = 50.dp, start = 50.dp, bottom = 20.dp)
+                        .fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(Color(0xFFF3BB81))
+                ) {
+                    Text(
+                        text = "Try Again !",
+                        fontSize = 20.sp
+                    )
+                }
+            }
+
         }
-        LottieAnimationCeleb()
+    }
+    BackHandler {
+        // not allowed to back
     }
 }
 

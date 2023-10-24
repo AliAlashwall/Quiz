@@ -1,6 +1,8 @@
 package com.example.quizzard.ui.screens
 
 import android.annotation.SuppressLint
+import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -65,7 +67,7 @@ fun HomeScreen(
         is QuizUiState.Success -> GameScreen(quizUiState.question.results, quizViewModel, navToFinalScreen
                                   ) { quizViewModel.backToHome { navBack() } }
 
-        is QuizUiState.Loading -> LoadingScreen(modifier = Modifier.fillMaxSize())
+        is QuizUiState.Loading -> LoadingScreen()
     }
 }
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -100,6 +102,9 @@ fun GameScreen(
             navBack = {navBack()}
         )
     }
+    BackHandler {
+        // use only upper back button to back
+    }
 }
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -117,7 +122,7 @@ fun GameLayout(
     navBack: () -> Unit
 ) {
     val shuffledListAnswer = remember(listAnswer) { listAnswer.shuffled() }
-
+    Log.v("MainActivity",correctAnswer)
     Column(
         modifier = Modifier
             .fillMaxSize(),
@@ -281,7 +286,7 @@ fun AnswersList(
 }
 
 @Composable
-fun LoadingScreen(modifier: Modifier) {
+fun LoadingScreen() {
     rememberLottieComposition(
         spec = LottieCompositionSpec.RawRes(R.raw.loading_animation)
     ).value.let { composition ->

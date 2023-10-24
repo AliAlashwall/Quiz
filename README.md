@@ -1,4 +1,4 @@
-# Quiz Application 🎯📝
+# Quiz Application 📝
 
 This is a Quiz Application built using Jetpack Compose, designed to test your knowledge in various categories. It provides an interactive and engaging way to learn and challenge yourself in different subjects.
 
@@ -47,7 +47,7 @@ The Quiz Application utilizes the following dependencies:
 
 - Jetpack Compose 1.0.5: The UI toolkit used for building the user interface.
 
-- Room 2.4.0: A library for local data persistence, used for storing quiz questions and user scores.
+- Retrofit 2.9.0 : Used to make network requests to the API and retrieve quiz data.
 
 - Coroutine 1.5.1: A library for asynchronous programming, used for handling background operations.
 

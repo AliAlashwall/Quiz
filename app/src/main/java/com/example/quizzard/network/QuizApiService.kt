@@ -15,10 +15,10 @@ private val retrofit = Retrofit.Builder()
     .build()
 
 interface QuizApiService {
-    @GET("api.php?amount=10&category=18&difficulty=easy")
+    @GET("api.php?amount=10&category=18")
     suspend fun getComputerQuestions() : QuizData
 
-    @GET("api.php?amount=10&category=21&difficulty=easy")
+    @GET("api.php?amount=10&category=21")
     suspend fun getSportsQuestion() : QuizData
 
     @GET("api.php?amount=10&category=19&difficulty=medium")

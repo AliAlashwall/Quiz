@@ -85,7 +85,7 @@ dependencies {
     //lottie
     implementation ("com.airbnb.android:lottie-compose:4.2.0")
     implementation ("com.airbnb.android:lottie:4.2.2")
-    implementation ("androidx.appcompat:appcompat:1.4.0")
+    implementation ("androidx.appcompat:appcompat:1.6.1")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

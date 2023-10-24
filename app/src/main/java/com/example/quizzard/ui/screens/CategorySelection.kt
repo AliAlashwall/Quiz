@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.quizzard.QuizViewModel
 import com.example.quizzard.R
+import com.example.quizzard.ui.theme.QuizMasterTheme
 
 @Composable
 fun CategorySelection(
@@ -49,7 +50,10 @@ val gameUiState by gameViewModel.gameUiState.collectAsState()
         QuizTopAppBar(name =gameUiState.userName)
 
         Text(
-            modifier = Modifier.padding(start = 20.dp,top = 30.dp).fillMaxWidth().align(Alignment.Start),
+            modifier = Modifier
+                .padding(start = 20.dp, top = 30.dp)
+                .fillMaxWidth()
+                .align(Alignment.Start),
             text = "👉 Practice more",
             fontWeight = FontWeight.Bold
 
@@ -58,8 +62,12 @@ val gameUiState by gameViewModel.gameUiState.collectAsState()
         DailyQuizItem {
             gameViewModel.onDailyQuizClicked { navToHome() }
         }
+        Spacer(modifier = Modifier.height(30.dp))
         Text(
-            modifier = Modifier.padding(start = 20.dp,top = 10.dp).fillMaxWidth().align(Alignment.Start),
+            modifier = Modifier
+                .padding(start = 20.dp, top = 10.dp)
+                .fillMaxWidth()
+                .align(Alignment.Start),
             text = "👉 Specific category",
             fontWeight = FontWeight.Bold
             )
@@ -96,7 +104,7 @@ fun DailyQuizItem(
 ){
     Card(
         modifier = Modifier
-            .padding(20.dp)
+            .padding(horizontal = 20.dp, vertical = 10.dp)
             .fillMaxWidth()
             .height(90.dp)
             .clickable { onDailyQuizClicked() },
@@ -183,6 +191,7 @@ fun CategoryItem(
         modifier = Modifier
             .padding(20.dp, 10.dp)
             .fillMaxWidth()
+            .padding(bottom = 10.dp)
             .height(70.dp)
             .clickable {
                 onCategoryClicked { navToHome() }
@@ -235,6 +244,8 @@ fun CategoryItem(
 @Preview(showSystemUi = true)
 @Composable
 fun FirstPrev(){
+    QuizMasterTheme {
     val gameViewModel: QuizViewModel = viewModel()
     CategorySelection(gameViewModel){}
+    }
 }

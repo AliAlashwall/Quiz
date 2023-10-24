@@ -26,7 +26,7 @@ import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieClipSpec
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieComposition
-import com.example.quizzard.ui.theme.QuizzardTheme
+import com.example.quizzard.ui.theme.QuizMasterTheme
 
 @Composable
 fun FinalScreen(
@@ -92,7 +92,7 @@ fun FinalScreen(
 @Preview(showSystemUi = true)
 @Composable
 fun FinalPreview(){
-    QuizzardTheme{
+    QuizMasterTheme{
         FinalScreen("Ali", 5,{},10) {
         }
     }

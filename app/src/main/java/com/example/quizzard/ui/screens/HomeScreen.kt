@@ -54,7 +54,7 @@ import com.example.quizzard.QuizViewModel
 import com.example.quizzard.R
 import com.example.quizzard.data.GameUiState
 import com.example.quizzard.data.Question
-import com.example.quizzard.ui.theme.QuizzardTheme
+import com.example.quizzard.ui.theme.QuizMasterTheme
 
 @Composable
 fun HomeScreen(
@@ -133,7 +133,7 @@ fun GameLayout(
 
         QuestionCard(question, counter, listSize)
 
-        Spacer(modifier = Modifier.height(25.dp))
+        Spacer(modifier = Modifier.weight(1f)/*height(25.dp)*/)
 
         AnswersList(
             listAnswer = shuffledListAnswer,
@@ -146,7 +146,7 @@ fun GameLayout(
         Button(
             onClick = { onNextClick() },
             modifier = Modifier
-                .padding(bottom = 20.dp)
+                .padding(top = 5.dp,bottom = 20.dp)
                 .width(280.dp),
             colors = ButtonDefaults.buttonColors(Color(0xFFF3BB81))
         )
@@ -163,9 +163,9 @@ fun GameLayout(
 
 @Composable
 fun QuestionCard(
-    question : String = "The Rio 2016 Summer olympics held it's closing ceremony on what date",
-    counter : Int=1,
-    listSize : Int=10
+    question : String,
+    counter : Int,
+    listSize : Int
 )
 {
     var textSize by remember { mutableStateOf(20.sp) }
@@ -195,11 +195,11 @@ fun QuestionCard(
             )
             Row(
                 modifier = Modifier.fillMaxSize(),
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
             ){
                 Text(
-                    modifier = Modifier
-                        .fillMaxSize(),
+                    modifier = Modifier,
                     text = question,
                     textAlign = TextAlign.Start,
                     color = Color(0xff642900),
@@ -294,9 +294,9 @@ fun LoadingScreen() {
             composition,
             modifier = Modifier.size(200.dp),
             alignment = Alignment.Center,
+            iterations = 3
         )
     }
-
 }
 
 @Composable
@@ -369,11 +369,11 @@ fun HomeTopAppBar(
 @Preview(showSystemUi = true)
 @Composable
 fun HomePreview(){
-    QuizzardTheme {
+    QuizMasterTheme {
         val quizViewModel : QuizViewModel = viewModel()
         val gameUiState by quizViewModel.gameUiState.collectAsState()
         GameLayout(
-            question = gameUiState.question,
+            question =  " hello ali",
             quizViewModel = quizViewModel,
             gameUiState = gameUiState,
             listAnswer = gameUiState.listOfAnswer,

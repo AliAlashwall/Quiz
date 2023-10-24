@@ -20,14 +20,9 @@ import org.jsoup.Jsoup
 interface QuizUiState{
     object Loading : QuizUiState
     data class Success(val question: QuizData) : QuizUiState
-//    object Error
+
 }
-//enum class Category{
-//    Daily,
-//    Math,
-//    Sports,
-//    Programing
-//}
+
 
 class QuizViewModel :ViewModel() {
     var quizUiState: QuizUiState by mutableStateOf(QuizUiState.Loading)
@@ -36,9 +31,6 @@ class QuizViewModel :ViewModel() {
     private val _gameUiState = MutableStateFlow(GameUiState())
     val gameUiState : StateFlow<GameUiState> = _gameUiState.asStateFlow()
 
-//    init {
-//        getQuestion()
-//    }
     fun onSportClicked(navToHome :()->Unit) {
         _gameUiState.update {
             it.copy(
@@ -116,7 +108,7 @@ class QuizViewModel :ViewModel() {
             it.copy(
                 question = Jsoup.parse(question.question).text(),
                 listOfAnswer = (question.incorrectAnswers + question.correctAnswer).map {answer -> Jsoup.parse(answer).text() },
-                correctAnswer = question.correctAnswer,
+                correctAnswer = Jsoup.parse(question.correctAnswer).text(),
                 questionListSize = questionsList.size
             )
         }

@@ -7,10 +7,10 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.quizzard.data.GameUiState
+import com.example.quizzard.data.NetworkQuizRepository
 import com.example.quizzard.data.Question
 import com.example.quizzard.data.QuizData
 import kotlinx.coroutines.launch
-import com.example.quizzard.network.QuizApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -83,13 +83,14 @@ class QuizViewModel :ViewModel() {
     }
     private fun getQuestion() {
         viewModelScope.launch {
+            val quizRepository = NetworkQuizRepository()
             val category = _gameUiState.value.category
             quizUiState = when (category) {
-                "Math"-> QuizUiState.Success(QuizApi.retrofitService.getMathQuestions())
-                "Daily" -> QuizUiState.Success(QuizApi.retrofitService.getDailyQuiz())
-                "Programing" -> QuizUiState.Success(QuizApi.retrofitService.getComputerQuestions())
-                "Sports" -> QuizUiState.Success(QuizApi.retrofitService.getSportsQuestion())
-                "History" -> QuizUiState.Success(QuizApi.retrofitService.getHistoryQuestions())
+                "Math"-> QuizUiState.Success(quizRepository.getMathQuestions())
+                "Daily" -> QuizUiState.Success(quizRepository.getDailyQuiz())
+                "Programing" -> QuizUiState.Success(quizRepository.getComputerQuestions())
+                "Sports" -> QuizUiState.Success(quizRepository.getSportsQuestion())
+                "History" -> QuizUiState.Success(quizRepository.getHistoryQuestions())
                 else -> QuizUiState.Loading
             }
         }

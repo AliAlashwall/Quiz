@@ -18,13 +18,25 @@ import kotlinx.coroutines.flow.update
 import org.jsoup.Jsoup
 
 interface QuizUiState{
-    object Loading : QuizUiState
     data class Success(val question: QuizData) : QuizUiState
+    object Loading : QuizUiState
 
 }
-
-
 class QuizViewModel :ViewModel() {
+    private fun getQuestion() {
+        viewModelScope.launch {
+            val quizRepository = NetworkQuizRepository()
+            val category = _gameUiState.value.category
+            quizUiState = when (category) {
+                "Math"-> QuizUiState.Success(quizRepository.getMathQuestions())
+                "Daily" -> QuizUiState.Success(quizRepository.getDailyQuiz())
+                "Programing" -> QuizUiState.Success(quizRepository.getComputerQuestions())
+                "Sports" -> QuizUiState.Success(quizRepository.getSportsQuestion())
+                "History" -> QuizUiState.Success(quizRepository.getHistoryQuestions())
+                else -> QuizUiState.Loading
+            }
+        }
+    }
     var quizUiState: QuizUiState by mutableStateOf(QuizUiState.Loading)
         private set
 
@@ -81,20 +93,7 @@ class QuizViewModel :ViewModel() {
             navToHome()
         }
     }
-    private fun getQuestion() {
-        viewModelScope.launch {
-            val quizRepository = NetworkQuizRepository()
-            val category = _gameUiState.value.category
-            quizUiState = when (category) {
-                "Math"-> QuizUiState.Success(quizRepository.getMathQuestions())
-                "Daily" -> QuizUiState.Success(quizRepository.getDailyQuiz())
-                "Programing" -> QuizUiState.Success(quizRepository.getComputerQuestions())
-                "Sports" -> QuizUiState.Success(quizRepository.getSportsQuestion())
-                "History" -> QuizUiState.Success(quizRepository.getHistoryQuestions())
-                else -> QuizUiState.Loading
-            }
-        }
-    }
+
     fun updateUserName(name:String){
         _gameUiState.update {
             it.copy(

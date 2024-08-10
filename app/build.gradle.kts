@@ -1,19 +1,16 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.plugin.serialization") version "1.8.10"
-    id("kotlin-kapt")
+    id("org.jetbrains.kotlin.kapt") // Corrected plugin ID for kapt
     id("com.google.dagger.hilt.android")
 }
 
 android {
     namespace = "com.example.quizzard"
     compileSdk = 34
-
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
 
     defaultConfig {
         applicationId = "com.example.quizzard"
@@ -28,6 +25,15 @@ android {
         }
     }
 
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -37,25 +43,21 @@ android {
             )
         }
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
 
-    }
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
     buildFeatures {
         compose = true
     }
+
     composeOptions {
         kotlinCompilerExtensionVersion = "1.4.3"
     }
+
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+
     configurations.all {
         resolutionStrategy {
             force("androidx.appcompat:appcompat:1.4.0")
@@ -64,7 +66,6 @@ android {
 }
 
 dependencies {
-
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
     implementation("androidx.activity:activity-compose:1.8.0")
@@ -73,40 +74,37 @@ dependencies {
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
-    //    " viewModel "
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
-
-//    " window size "
     implementation("androidx.compose.material3:material3-window-size-class")
 
-// Retrofit
+    // Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    val okHttp = "4.12.0"
+    implementation("com.squareup.okhttp3:okhttp:$okHttp")
+    implementation("com.squareup.okhttp3:logging-interceptor:$okHttp")
 
-// Kotlin serialization
+    // Kotlin serialization
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
     implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0")
-    implementation("com.squareup.okhttp3:okhttp:4.11.0")
-    //jsoup
+
+    // Jsoup
     implementation("org.jsoup:jsoup:1.14.2")
-    //Navigation
+
+    // Navigation
     implementation("androidx.navigation:navigation-compose:2.7.4")
-    //lottie
+
+    // Lottie
     implementation("com.airbnb.android:lottie-compose:4.2.0")
     implementation("com.airbnb.android:lottie:4.2.2")
+
+    // AppCompat
     implementation("androidx.appcompat:appcompat:1.6.1")
 
-    // For hilt Implementation
-    implementation("com.google.dagger:hilt-android:2.46.1")
-    kapt("com.google.dagger:hilt-compiler:2.46.1")
+    // Hilt
+    implementation("com.google.dagger:hilt-android:2.50")
+    kapt("com.google.dagger:hilt-compiler:2.50")
 
-    // For instrumentation tests
-    androidTestImplementation("com.google.dagger:hilt-android-testing:2.46.1")
-    kaptAndroidTest("com.google.dagger:hilt-android-compiler:2.46.1")
-
-    // For local unit tests
-    testImplementation("com.google.dagger:hilt-android-testing:2.46.1")
-    kaptTest(" 'com.google.dagger:hilt-compiler:2.46.1'")
-
+    // Testing
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -114,7 +112,26 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+
+    // Hilt Testing
+    androidTestImplementation("com.google.dagger:hilt-android-testing:2.50")
+    kaptAndroidTest("com.google.dagger:hilt-android-compiler:2.50")
+    testImplementation("com.google.dagger:hilt-android-testing:2.50")
+    kaptTest("com.google.dagger:hilt-compiler:2.50")
 }
+
 kapt {
     correctErrorTypes = true
+}
+
+tasks.withType<KotlinCompile>().configureEach {
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+}
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
 }

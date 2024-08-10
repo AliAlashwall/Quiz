@@ -2,22 +2,26 @@ package com.example.quizzard.data.repository
 
 import com.example.quizzard.domain.model.QuizData
 import com.example.quizzard.domain.repository.QuizRepository
-import com.example.quizzard.data.data_source.QuizApi
+import com.example.quizzard.data.data_source.QuizApiService
 
-class QuizRepositoryImpl : QuizRepository {
+class QuizRepositoryImpl(private val quizApiService: QuizApiService) : QuizRepository {
     override suspend fun getComputerQuestions(): QuizData {
-        return QuizApi.retrofitService.getComputerQuestions()
+        return quizApiService.getComputerQuestions()
     }
+
     override suspend fun getSportsQuestion(): QuizData {
-        return QuizApi.retrofitService.getSportsQuestion()
+        return quizApiService.getSportsQuestion()
     }
+
     override suspend fun getMathQuestions(): QuizData {
-        return QuizApi.retrofitService.getMathQuestions()
+        return quizApiService.getMathQuestions()
     }
+
     override suspend fun getHistoryQuestions(): QuizData {
-        return QuizApi.retrofitService.getHistoryQuestions()
+        return quizApiService.getHistoryQuestions()
     }
+
     override suspend fun getDailyQuiz(): QuizData {
-        return QuizApi.retrofitService.getDailyQuiz()
+        return quizApiService.getDailyQuiz()
     }
 }

@@ -1,4 +1,4 @@
-package com.example.quizzard.presentation.screens
+package com.example.quizzard
 
 import android.annotation.SuppressLint
 import androidx.compose.runtime.getValue
@@ -6,10 +6,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.quizzard.domain.model.Question
-import com.example.quizzard.domain.model.QuizData
-import com.example.quizzard.domain.use_case.QuizUseCase
-import dagger.hilt.android.lifecycle.HiltViewModel
+import com.example.quizzard.data.GameUiState
+import com.example.quizzard.data.NetworkQuizRepository
+import com.example.quizzard.data.Question
+import com.example.quizzard.data.QuizData
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -33,14 +34,15 @@ class QuizViewModel @Inject constructor(
 
     private fun getQuestion() {
         viewModelScope.launch {
+
             val category = _gameUiState.value.category
             quizUiState = try {
                 when (category) {
-                    "Math" -> QuizUiState.Success(quizUseCase.mathQuestionsUseCase.invoke())
-                    "Daily" -> QuizUiState.Success(quizUseCase.dailyQuizUseCase())
-                    "Programing" -> QuizUiState.Success(quizUseCase.computerQuestionsUseCase.invoke())
-                    "Sports" -> QuizUiState.Success(quizUseCase.sportsQuestionUseCase.invoke())
-                    "History" -> QuizUiState.Success(quizUseCase.historyQuestionsUseCase.invoke())
+                    Subject.Math -> QuizUiState.Success(QuizApi.retrofitService.getMathQuestions())
+                    Subject.Daily -> QuizUiState.Success(QuizApi.retrofitService.getDailyQuiz())
+                    Subject.Programing -> QuizUiState.Success(QuizApi.retrofitService.getComputerQuestions())
+                    Subject.Sports -> QuizUiState.Success(QuizApi.retrofitService.getSportsQuestion())
+                    Subject.History -> QuizUiState.Success(QuizApi.retrofitService.getHistoryQuestions())
                     else -> QuizUiState.Loading
                 }
             } catch (e: IOException) {
@@ -58,7 +60,7 @@ class QuizViewModel @Inject constructor(
     fun onSportClicked(navToHome: () -> Unit) {
         _gameUiState.update {
             it.copy(
-                category = "Sports"
+                category = Subject.Sports
             )
         }
         getQuestion()
@@ -68,7 +70,7 @@ class QuizViewModel @Inject constructor(
     fun onComputerClicked(navToHome: () -> Unit) {
         _gameUiState.update {
             it.copy(
-                category = "Programing"
+                category = Subject.Programing
             )
         }
         getQuestion()
@@ -78,7 +80,7 @@ class QuizViewModel @Inject constructor(
     fun onMathClicked(navToHome: () -> Unit) {
         _gameUiState.update {
             it.copy(
-                category = "Math"
+                category = Subject.Math
             )
         }
         getQuestion()
@@ -89,7 +91,7 @@ class QuizViewModel @Inject constructor(
         viewModelScope.launch {
             _gameUiState.update {
                 it.copy(
-                    category = "Daily"
+                    category = Subject.Daily
                 )
             }
             getQuestion()
@@ -101,7 +103,7 @@ class QuizViewModel @Inject constructor(
         viewModelScope.launch {
             _gameUiState.update {
                 it.copy(
-                    category = "History"
+                    category = Subject.History
                 )
             }
             getQuestion()
@@ -163,7 +165,6 @@ class QuizViewModel @Inject constructor(
                 question = "",
                 listOfAnswer = listOf(""),
                 endQuiz = false,
-                category = ""
             )
         }
         navToHome()
@@ -197,7 +198,7 @@ class QuizViewModel @Inject constructor(
                 question = "",
                 listOfAnswer = listOf(""),
                 endQuiz = false,
-                category = ""
+                category = Subject.Empty,
             )
         }
     }

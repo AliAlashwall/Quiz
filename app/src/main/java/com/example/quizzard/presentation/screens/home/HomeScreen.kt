@@ -129,7 +129,7 @@ fun GameLayout(
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        HomeTopAppBar(gameUiState.category, score, listSize, navBack)
+        HomeTopAppBar("${gameUiState.category}", score, listSize, navBack)
 
         QuestionCard(question, counter, listSize)
 
@@ -146,7 +146,7 @@ fun GameLayout(
         Button(
             onClick = { onNextClick() },
             modifier = Modifier
-                .padding(top = 5.dp,bottom = 20.dp)
+                .padding(top = 5.dp, bottom = 20.dp)
                 .width(280.dp),
             colors = ButtonDefaults.buttonColors(Color(0xFFF3BB81))
         )

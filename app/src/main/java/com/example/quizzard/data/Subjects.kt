@@ -6,5 +6,5 @@ enum class Subject {
     Programing,
     Sports,
     History,
-    Empty
+    Empty,
 }

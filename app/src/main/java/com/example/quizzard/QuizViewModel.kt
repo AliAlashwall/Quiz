@@ -11,11 +11,11 @@ import com.example.quizzard.data.Question
 import com.example.quizzard.data.QuizData
 import com.example.quizzard.data.Subject
 import com.example.quizzard.network.QuizApi
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import okio.IOException
 import org.jsoup.Jsoup
 
@@ -29,6 +29,7 @@ interface QuizUiState {
 class QuizViewModel : ViewModel() {
     private fun getQuestion() {
         viewModelScope.launch {
+
             val category = _gameUiState.value.category
             quizUiState = try {
                 when (category) {

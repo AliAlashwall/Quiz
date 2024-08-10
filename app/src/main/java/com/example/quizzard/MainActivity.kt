@@ -11,7 +11,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.quizzard.presentation.navigation.NavGraph
-import com.example.quizzard.presentation.screens.QuizViewModel
 import com.example.quizzard.presentation.theme.QuizMasterTheme
 import dagger.hilt.android.AndroidEntryPoint
 

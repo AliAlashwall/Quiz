@@ -30,8 +30,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.quizzard.QuizViewModel
 import com.example.quizzard.R
-import com.example.quizzard.presentation.screens.QuizViewModel
+
 import com.example.quizzard.presentation.theme.QuizMasterTheme
 
 @Composable

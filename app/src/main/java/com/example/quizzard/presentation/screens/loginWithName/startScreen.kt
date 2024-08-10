@@ -34,8 +34,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieComposition
+import com.example.quizzard.QuizViewModel
 import com.example.quizzard.R
-import com.example.quizzard.presentation.screens.QuizViewModel
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

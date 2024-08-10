@@ -1,5 +1,7 @@
 package com.example.quizzard.presentation.screens
 
+import com.example.quizzard.data.Subject
+
 data class GameUiState(
     var userName : String = "",
     var clicked : Boolean = false,

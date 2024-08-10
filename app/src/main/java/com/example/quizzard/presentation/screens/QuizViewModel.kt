@@ -6,11 +6,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.quizzard.data.GameUiState
-import com.example.quizzard.data.NetworkQuizRepository
-import com.example.quizzard.data.Question
-import com.example.quizzard.data.QuizData
-import kotlinx.coroutines.launch
+import com.example.quizzard.data.Subject
+import com.example.quizzard.domain.model.Question
+import com.example.quizzard.domain.model.QuizData
+import com.example.quizzard.domain.use_case.QuizUseCase
+import com.example.quizzard.presentation.screens.GameUiState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -38,11 +39,11 @@ class QuizViewModel @Inject constructor(
             val category = _gameUiState.value.category
             quizUiState = try {
                 when (category) {
-                    Subject.Math -> QuizUiState.Success(QuizApi.retrofitService.getMathQuestions())
-                    Subject.Daily -> QuizUiState.Success(QuizApi.retrofitService.getDailyQuiz())
-                    Subject.Programing -> QuizUiState.Success(QuizApi.retrofitService.getComputerQuestions())
-                    Subject.Sports -> QuizUiState.Success(QuizApi.retrofitService.getSportsQuestion())
-                    Subject.History -> QuizUiState.Success(QuizApi.retrofitService.getHistoryQuestions())
+                    Subject.Math -> QuizUiState.Success(quizUseCase.mathQuestionsUseCase.invoke())
+                    Subject.Daily -> QuizUiState.Success(quizUseCase.dailyQuizUseCase.invoke())
+                    Subject.Programing -> QuizUiState.Success(quizUseCase.computerQuestionsUseCase.invoke())
+                    Subject.Sports -> QuizUiState.Success(quizUseCase.sportsQuestionUseCase.invoke())
+                    Subject.History -> QuizUiState.Success(quizUseCase.historyQuestionsUseCase.invoke())
                     else -> QuizUiState.Loading
                 }
             } catch (e: IOException) {

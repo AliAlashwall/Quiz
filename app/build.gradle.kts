@@ -2,11 +2,18 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.plugin.serialization") version "1.8.10"
+    id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
     namespace = "com.example.quizzard"
     compileSdk = 34
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
 
     defaultConfig {
         applicationId = "com.example.quizzard"
@@ -80,15 +87,25 @@ dependencies {
     implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0")
     implementation("com.squareup.okhttp3:okhttp:4.11.0")
     //jsoup
-    implementation ("org.jsoup:jsoup:1.14.2")
+    implementation("org.jsoup:jsoup:1.14.2")
     //Navigation
     implementation("androidx.navigation:navigation-compose:2.7.4")
     //lottie
-    implementation ("com.airbnb.android:lottie-compose:4.2.0")
-    implementation ("com.airbnb.android:lottie:4.2.2")
-    implementation ("androidx.appcompat:appcompat:1.6.1")
+    implementation("com.airbnb.android:lottie-compose:4.2.0")
+    implementation("com.airbnb.android:lottie:4.2.2")
+    implementation("androidx.appcompat:appcompat:1.6.1")
 
+    // For hilt Implementation
+    implementation("com.google.dagger:hilt-android:2.46.1")
+    kapt("com.google.dagger:hilt-compiler:2.46.1")
 
+    // For instrumentation tests
+    androidTestImplementation("com.google.dagger:hilt-android-testing:2.46.1")
+    kaptAndroidTest("com.google.dagger:hilt-android-compiler:2.46.1")
+
+    // For local unit tests
+    testImplementation("com.google.dagger:hilt-android-testing:2.46.1")
+    kaptTest(" 'com.google.dagger:hilt-compiler:2.46.1'")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
@@ -97,4 +114,7 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+}
+kapt {
+    correctErrorTypes = true
 }

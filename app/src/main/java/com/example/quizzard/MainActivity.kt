@@ -13,7 +13,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.quizzard.presentation.navigation.NavGraph
 import com.example.quizzard.presentation.screens.QuizViewModel
 import com.example.quizzard.presentation.theme.QuizMasterTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,7 +26,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                     val quizViewModel : QuizViewModel = viewModel()
+                    val quizViewModel: QuizViewModel = viewModel()
                     val gameUiState by quizViewModel.gameUiState.collectAsState()
                     NavGraph(
                         quizViewModel = quizViewModel,

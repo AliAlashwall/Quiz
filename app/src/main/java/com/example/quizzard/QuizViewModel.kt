@@ -7,7 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.quizzard.data.GameUiState
-import com.example.quizzard.data.NetworkQuizRepository
+import com.example.quizzard.data.QuizRepositoryImpl
 import com.example.quizzard.data.Question
 import com.example.quizzard.data.QuizData
 import kotlinx.coroutines.launch
@@ -25,7 +25,7 @@ interface QuizUiState{
 class QuizViewModel :ViewModel() {
     private fun getQuestion() {
         viewModelScope.launch {
-            val quizRepository = NetworkQuizRepository()
+            val quizRepository = QuizRepositoryImpl()
             val category = _gameUiState.value.category
             quizUiState = when (category) {
                 "Math"-> QuizUiState.Success(quizRepository.getMathQuestions())

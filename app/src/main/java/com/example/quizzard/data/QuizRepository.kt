@@ -10,7 +10,7 @@ interface QuizRepository {
     suspend fun getDailyQuiz() : QuizData
 }
 
-class NetworkQuizRepository() : QuizRepository{
+class QuizRepositoryImpl : QuizRepository{
     override suspend fun getComputerQuestions(): QuizData {
         return QuizApi.retrofitService.getComputerQuestions()
     }

@@ -29,7 +29,6 @@ interface QuizApiService {
 
     @GET("api.php?amount=20")
     suspend fun getDailyQuiz() : QuizData
-
 }
 
 object QuizApi{

@@ -24,7 +24,7 @@ fun NavGraph(
         navController = navController,
         startDestination = Screens.Start.name
 
-        ) {
+    ) {
         composable(route = Screens.Start.name) {
             StartScreen(quizViewModel) {
                 navController.navigate(Screens.CategorySelection.name)
@@ -36,9 +36,10 @@ fun NavGraph(
             }
         }
         composable(route = Screens.Home.name) {
-            HomeScreen(quizViewModel,
-                { navController.navigate(Screens.Final.name) },
-                {
+            HomeScreen(
+                quizViewModel = quizViewModel,
+                navToFinalScreen = { navController.navigate(Screens.Final.name) },
+                navBack = {
                     quizViewModel.backToHome {
                         navController.popBackStack(
                             Screens.CategorySelection.name,
@@ -47,7 +48,6 @@ fun NavGraph(
                     }
                 }
             )
-
         }
         composable(route = Screens.Final.name) {
             FinalScreen(

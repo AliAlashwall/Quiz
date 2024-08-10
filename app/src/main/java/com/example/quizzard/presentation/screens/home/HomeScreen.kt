@@ -1,4 +1,4 @@
-package com.example.quizzard.ui.screens
+package com.example.quizzard.presentation.screens.home
 
 import android.annotation.SuppressLint
 import android.util.Log
@@ -49,12 +49,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieComposition
-import com.example.quizzard.QuizUiState
-import com.example.quizzard.QuizViewModel
 import com.example.quizzard.R
-import com.example.quizzard.data.GameUiState
-import com.example.quizzard.data.Question
-import com.example.quizzard.ui.theme.QuizMasterTheme
+import com.example.quizzard.domain.model.Question
+import com.example.quizzard.presentation.screens.GameUiState
+import com.example.quizzard.presentation.screens.QuizUiState
+import com.example.quizzard.presentation.screens.QuizViewModel
+import com.example.quizzard.presentation.theme.QuizMasterTheme
 
 @Composable
 fun HomeScreen(
@@ -74,7 +74,7 @@ fun HomeScreen(
 @Composable
 fun GameScreen(
     questionList: List<Question>,
-   quizViewModel : QuizViewModel,
+    quizViewModel : QuizViewModel,
     navToFinalScreen : () ->Unit,
     navBack: () -> Unit
 ){

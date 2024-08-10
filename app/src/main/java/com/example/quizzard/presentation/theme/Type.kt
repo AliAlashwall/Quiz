@@ -1,4 +1,4 @@
-package com.example.quizzard.ui.theme
+package com.example.quizzard.presentation.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

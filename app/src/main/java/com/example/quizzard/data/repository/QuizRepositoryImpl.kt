@@ -1,16 +1,10 @@
-package com.example.quizzard.data
+package com.example.quizzard.data.repository
 
-import com.example.quizzard.network.QuizApi
+import com.example.quizzard.domain.model.QuizData
+import com.example.quizzard.domain.repository.QuizRepository
+import com.example.quizzard.data.data_source.QuizApi
 
-interface QuizRepository {
-    suspend fun getComputerQuestions() : QuizData
-    suspend fun getSportsQuestion() : QuizData
-    suspend fun getMathQuestions() : QuizData
-    suspend fun getHistoryQuestions() : QuizData
-    suspend fun getDailyQuiz() : QuizData
-}
-
-class QuizRepositoryImpl : QuizRepository{
+class QuizRepositoryImpl : QuizRepository {
     override suspend fun getComputerQuestions(): QuizData {
         return QuizApi.retrofitService.getComputerQuestions()
     }
@@ -24,6 +18,6 @@ class QuizRepositoryImpl : QuizRepository{
         return QuizApi.retrofitService.getHistoryQuestions()
     }
     override suspend fun getDailyQuiz(): QuizData {
-       return QuizApi.retrofitService.getDailyQuiz()
+        return QuizApi.retrofitService.getDailyQuiz()
     }
 }

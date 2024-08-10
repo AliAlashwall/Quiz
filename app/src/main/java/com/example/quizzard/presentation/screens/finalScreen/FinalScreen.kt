@@ -1,4 +1,4 @@
-package com.example.quizzard.ui.screens
+package com.example.quizzard.presentation.screens.finalScreen
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
@@ -26,7 +26,7 @@ import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieClipSpec
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieComposition
-import com.example.quizzard.ui.theme.QuizMasterTheme
+import com.example.quizzard.presentation.theme.QuizMasterTheme
 
 @Composable
 fun FinalScreen(

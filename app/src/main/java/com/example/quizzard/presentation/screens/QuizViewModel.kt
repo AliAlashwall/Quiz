@@ -1,4 +1,4 @@
-package com.example.quizzard
+package com.example.quizzard.presentation.screens
 
 import android.annotation.SuppressLint
 import androidx.compose.runtime.getValue
@@ -6,10 +6,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.quizzard.data.GameUiState
-import com.example.quizzard.data.QuizRepositoryImpl
-import com.example.quizzard.data.Question
-import com.example.quizzard.data.QuizData
+import com.example.quizzard.data.repository.QuizRepositoryImpl
+import com.example.quizzard.domain.model.Question
+import com.example.quizzard.domain.model.QuizData
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

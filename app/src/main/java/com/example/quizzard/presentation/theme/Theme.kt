@@ -1,4 +1,4 @@
-package com.example.quizzard.ui.theme
+package com.example.quizzard.presentation.theme
 
 import android.app.Activity
 import android.os.Build
@@ -78,5 +78,6 @@ fun QuizMasterTheme(
     MaterialTheme(
         colorScheme = colorScheme,
         content = content,
+        typography = Typography,
     )
 }

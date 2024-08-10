@@ -1,4 +1,4 @@
-package com.example.quizzard.data
+package com.example.quizzard.domain.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

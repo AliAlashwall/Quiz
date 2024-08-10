@@ -1,4 +1,4 @@
-package com.example.quizzard.data
+package com.example.quizzard.presentation.screens
 
 data class GameUiState(
     var userName : String = "",

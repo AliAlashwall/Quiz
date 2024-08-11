@@ -1,4 +1,4 @@
-package com.example.quizzard
+package com.example.quizzard.presentation.screens
 
 import android.annotation.SuppressLint
 import androidx.compose.runtime.getValue
@@ -10,7 +10,6 @@ import com.example.quizzard.data.Subject
 import com.example.quizzard.domain.model.Question
 import com.example.quizzard.domain.model.QuizData
 import com.example.quizzard.domain.use_case.QuizUseCase
-import com.example.quizzard.presentation.screens.GameUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -171,10 +170,11 @@ class QuizViewModel @Inject constructor(
         navToHome()
     }
 
-    fun onItemClicked() {
+    fun onItemClicked(index : Int) {
         _gameUiState.update {
             it.copy(
-                clicked = true
+                clicked = true,
+                itemIndexed = index
             )
         }
     }

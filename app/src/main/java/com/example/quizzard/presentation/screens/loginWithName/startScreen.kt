@@ -25,7 +25,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
@@ -34,7 +33,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieComposition
-import com.example.quizzard.QuizViewModel
+import com.example.quizzard.presentation.screens.QuizViewModel
 import com.example.quizzard.R
 
 
@@ -96,7 +95,7 @@ fun StartScreen(
                 .wrapContentSize()
                 .padding(top = 50.dp)
                 .width(300.dp),
-            colors = ButtonDefaults.buttonColors(Color(0xFFF3BB81))
+            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary)
         ) {
             Text(text = "Start Quiz")
         }

@@ -18,7 +18,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -29,6 +29,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.shapes
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -49,44 +50,48 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieComposition
-import com.example.quizzard.QuizUiState
-import com.example.quizzard.QuizViewModel
+import com.example.quizzard.presentation.screens.QuizUiState
+import com.example.quizzard.presentation.screens.QuizViewModel
 import com.example.quizzard.R
 import com.example.quizzard.domain.model.Question
 import com.example.quizzard.presentation.screens.GameUiState
 import com.example.quizzard.presentation.theme.QuizMasterTheme
+import com.example.quizzard.presentation.theme.falseAnswer
+import com.example.quizzard.presentation.theme.trueAnswer
 
 @Composable
 fun HomeScreen(
-    quizViewModel : QuizViewModel,
-    navToFinalScreen : () ->Unit,
-    navBack : () ->Unit
+    quizViewModel: QuizViewModel,
+    navToFinalScreen: () -> Unit,
+    navBack: () -> Unit
 ) {
 
-    when(val quizUiState = quizViewModel.quizUiState){
-        is QuizUiState.Success -> GameScreen(quizUiState.question.results, quizViewModel, navToFinalScreen
-                                  ) { quizViewModel.backToHome { navBack() } }
+    when (val quizUiState = quizViewModel.quizUiState) {
+        is QuizUiState.Success -> GameScreen(
+            quizUiState.question.results, quizViewModel, navToFinalScreen
+        ) { quizViewModel.backToHome { navBack() } }
 
         is QuizUiState.Loading -> LoadingScreen()
     }
 }
+
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun GameScreen(
     questionList: List<Question>,
-    quizViewModel : QuizViewModel,
-    navToFinalScreen : () ->Unit,
+    quizViewModel: QuizViewModel,
+    navToFinalScreen: () -> Unit,
     navBack: () -> Unit
-){
+) {
 
     quizViewModel.getQuestionDetails(questionList)
     val gameUiState by quizViewModel.gameUiState.collectAsState()
 
-    Column (
+    Column(
         Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
-    ){
+    ) {
 
         GameLayout(
             question = gameUiState.question,
@@ -99,30 +104,31 @@ fun GameScreen(
             counter = gameUiState.counter,
             listSize = gameUiState.questionListSize,
             onNextClick = { quizViewModel.onNextClick(navToFinalScreen) },
-            navBack = {navBack()}
+            navBack = { navBack() }
         )
     }
     BackHandler {
         // use only upper back button to back
     }
 }
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "StateFlowValueCalledInComposition")
 @Composable
 fun GameLayout(
-    question : String,
+    question: String,
     quizViewModel: QuizViewModel,
     gameUiState: GameUiState,
     listAnswer: List<Any>,
     correctAnswer: String,
     clicked: Boolean,
-    score : Int,
-    counter : Int,
-    listSize : Int,
+    score: Int,
+    counter: Int,
+    listSize: Int,
     onNextClick: () -> Unit,
     navBack: () -> Unit
 ) {
     val shuffledListAnswer = remember(listAnswer) { listAnswer.shuffled() }
-    Log.v("MainActivity",correctAnswer)
+    Log.v("MainActivity", correctAnswer)
     Column(
         modifier = Modifier
             .fillMaxSize(),
@@ -138,9 +144,10 @@ fun GameLayout(
         AnswersList(
             listAnswer = shuffledListAnswer,
             correctAnswer = correctAnswer,
-            clicked = clicked,
-            onItemClicked = { quizViewModel.onItemClicked() },
-            incScore = { quizViewModel.incScore() }
+            solved = clicked,
+            onItemClicked = { quizViewModel.onItemClicked(it) },
+            incScore = { quizViewModel.incScore() },
+            currentSelectedItem = quizViewModel.gameUiState.value.itemIndexed
         )
         Spacer(modifier = Modifier.weight(1f))
         Button(
@@ -148,7 +155,7 @@ fun GameLayout(
             modifier = Modifier
                 .padding(top = 5.dp, bottom = 20.dp)
                 .width(280.dp),
-            colors = ButtonDefaults.buttonColors(Color(0xFFF3BB81))
+            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary)
         )
         {
             Text(
@@ -163,11 +170,10 @@ fun GameLayout(
 
 @Composable
 fun QuestionCard(
-    question : String,
-    counter : Int,
-    listSize : Int
-)
-{
+    question: String,
+    counter: Int,
+    listSize: Int
+) {
     var textSize by remember { mutableStateOf(20.sp) }
     if (question.length > 120) textSize = 18.sp else 20.sp
     Card(
@@ -190,19 +196,19 @@ fun QuestionCard(
                     .align(alignment = Alignment.End),
                 text = "${counter + 1}/$listSize",
                 fontSize = 20.sp,
-                color = Color(0xFFFFFFFF),
+                color = Color.White,
                 textAlign = TextAlign.End
             )
             Row(
                 modifier = Modifier.fillMaxSize(),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
-            ){
+            ) {
                 Text(
                     modifier = Modifier,
                     text = question,
                     textAlign = TextAlign.Start,
-                    color = Color(0xff642900),
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
                     fontWeight = FontWeight.Bold,
                     fontSize = textSize,
                     lineHeight = 28.sp
@@ -216,11 +222,13 @@ fun QuestionCard(
 @Composable
 fun AnswerItem(
     listAnswer: List<Any>,
-    correctAnswer : String,
-    possibleAnswer: Any,
-    clicked : Boolean,
-    onItemClicked : () ->Unit,
-    incScore : () ->Unit
+    correctAnswer: String,
+    selectedAnswer: Any,
+    solved: Boolean,
+    currentSelectedItem: Int,
+    itemIndex: Int,
+    onItemClicked: (Int) -> Unit,
+    incScore: () -> Unit
 ) {
     Card(
         modifier = Modifier
@@ -228,57 +236,61 @@ fun AnswerItem(
             .fillMaxWidth()
             .height(70.dp)
             .clickable {
-                if (!clicked) {
-                    onItemClicked()
-                    if (possibleAnswer == correctAnswer) {
+                if (!solved) {
+                    onItemClicked(itemIndex)
+                    if (selectedAnswer == correctAnswer) {
                         incScore()
                     }
                 }
             },
         colors =
-        if(clicked){
-            if (possibleAnswer == correctAnswer) {
-                CardDefaults.cardColors(Color(0xFF2E996D))
-        }  else {
-                CardDefaults.cardColors(Color(0xFFEB8844))
-            }
+        if (solved && selectedAnswer == correctAnswer) {
+            CardDefaults.cardColors(trueAnswer)
         } else CardDefaults.cardColors(Color.Unspecified),
-        border = BorderStroke(1.dp, Color.LightGray),
+        border =
+        if (solved && (selectedAnswer != correctAnswer) &&
+            (itemIndex == currentSelectedItem)) {
+            BorderStroke(1.dp, Color.Red)
+        } else BorderStroke(1.dp, Color.LightGray)
     ) {
         Row(
             modifier = Modifier.fillMaxSize(),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "${(listAnswer.indexOf(possibleAnswer) + 1)}.",
+                text = "${(listAnswer.indexOf(selectedAnswer) + 1)}.",
                 Modifier.padding(horizontal = 10.dp)
             )
             Text(
-                text = possibleAnswer.toString(),
+                text = selectedAnswer.toString(),
                 Modifier.fillMaxWidth(),
             )
         }
     }
 }
+
 @Composable
 fun AnswersList(
     listAnswer: List<Any>,
-    correctAnswer :String,
-    clicked :Boolean,
-    onItemClicked : ()-> Unit,
-    incScore : ()->Unit
-,){
+    correctAnswer: String,
+    solved: Boolean,
+    currentSelectedItem: Int,
+    onItemClicked: (Int) -> Unit,
+    incScore: () -> Unit,
+) {
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(20.dp)
-    ){
-        items(listAnswer){possibleAnswer ->
+    ) {
+        itemsIndexed(listAnswer) { index, possibleAnswer ->
 
             AnswerItem(
                 listAnswer = listAnswer,
-                correctAnswer =correctAnswer ,
-                possibleAnswer = possibleAnswer,
-                clicked = clicked,
-                onItemClicked = { onItemClicked() },
+                correctAnswer = correctAnswer,
+                selectedAnswer = possibleAnswer,
+                solved = solved,
+                itemIndex = index,
+                currentSelectedItem = currentSelectedItem,
+                onItemClicked = { onItemClicked(index) },
                 incScore = incScore
             )
         }
@@ -301,79 +313,79 @@ fun LoadingScreen() {
 
 @Composable
 fun HomeTopAppBar(
-    category : String,
-    score : Int,
-    listSize : Int,
+    category: String,
+    score: Int,
+    listSize: Int,
     navBack: () -> Unit
-){
+) {
     val fac = if (listSize == 10) 40.dp else 20.dp
-    Column (
+    Column(
         modifier = Modifier
             .padding(horizontal = 10.dp)
             .fillMaxWidth(),
         verticalArrangement = Arrangement.Center
-    ){
-            Row(
-                modifier = Modifier
-                    .padding(top = 15.dp, bottom = 10.dp)
-                    .fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Start
-            ) {
-                Icon(
-                    painterResource(id = R.drawable.baseline_arrow_back_ios_24),
-                    null,
-                    modifier = Modifier.clickable { navBack() }
-                )
-                Spacer(modifier = Modifier.weight(1f))
-                Text(
-                    text = "$category Quiz",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 24.sp,
-                    textAlign = TextAlign.Center,
-                    color = Color(0xff642900)
-                )
-                Spacer(modifier = Modifier.weight(1f))
-            }
+    ) {
+        Row(
+            modifier = Modifier
+                .padding(top = 15.dp, bottom = 10.dp)
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start
+        ) {
+            Icon(
+                painterResource(id = R.drawable.baseline_arrow_back_ios_24),
+                null,
+                modifier = Modifier.clickable { navBack() }
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            Text(
+                text = "$category Quiz",
+                fontWeight = FontWeight.Bold,
+                fontSize = 24.sp,
+                textAlign = TextAlign.Center,
+                color = MaterialTheme.colorScheme.onPrimaryContainer
+            )
+            Spacer(modifier = Modifier.weight(1f))
+        }
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Start
-            ) {
-                when (score) {
-                    in 0..10 -> StretchableLine(score * fac)
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Start
+        ) {
+            when (score) {
+                in 0..10 -> StretchableLine(score * fac)
 
-                }
-            }
-            Row(
-                modifier = Modifier,
-                horizontalArrangement = Arrangement.Start,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "$score",
-                    color = Color(0xFF2E996D),
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.SemiBold
-                )
-                Text(
-                    text = "/$listSize",
-                    color = Color(0xFFEB8844),
-                    fontSize = 18.sp,
-                )
             }
         }
+        Row(
+            modifier = Modifier,
+            horizontalArrangement = Arrangement.Start,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "$score",
+                color = trueAnswer,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.SemiBold
+            )
+            Text(
+                text = "/$listSize",
+                color = falseAnswer,
+                fontSize = 18.sp,
+            )
+        }
+    }
 
 }
 
 @Preview(showSystemUi = true)
 @Composable
-fun HomePreview(){
+fun HomePreview() {
     QuizMasterTheme {
-        val quizViewModel : QuizViewModel = viewModel()
+        val quizViewModel: QuizViewModel = viewModel()
         val gameUiState by quizViewModel.gameUiState.collectAsState()
         GameLayout(
-            question =  " hello ali",
+            question = " hello ali",
             quizViewModel = quizViewModel,
             gameUiState = gameUiState,
             listAnswer = gameUiState.listOfAnswer,
@@ -392,14 +404,14 @@ fun HomePreview(){
 @Composable
 fun StretchableLine(
     width: Dp = 40.dp,
-    color: Color = Color(0xFF2E996D)
+    color: Color = trueAnswer
 ) {
     Box(
         Modifier
             .fillMaxWidth()
             .height(10.dp)
             .background(color = Color(0x66F6D1AB), RoundedCornerShape(10.dp))
-    ){
+    ) {
         Box(
             modifier = Modifier
                 .width(width)

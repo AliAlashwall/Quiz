@@ -16,6 +16,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -30,10 +31,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.quizzard.QuizViewModel
+import com.example.quizzard.presentation.screens.QuizViewModel
 import com.example.quizzard.R
 
 import com.example.quizzard.presentation.theme.QuizMasterTheme
+import com.example.quizzard.presentation.theme.trueAnswer
 
 @Composable
 fun CategorySelection(
@@ -109,7 +111,7 @@ fun DailyQuizItem(
             .fillMaxWidth()
             .height(90.dp)
             .clickable { onDailyQuizClicked() },
-        colors = CardDefaults.cardColors(Color(0xFF2E996D))
+        colors = CardDefaults.cardColors(trueAnswer)
     ){
         Row(
             modifier = Modifier
@@ -158,7 +160,7 @@ fun QuizTopAppBar(name :String) {
                     .padding(start = 20.dp, top = 10.dp),
                 text = "👋 Hi $name ,",
                 textAlign = TextAlign.Start,
-                color = Color(0xff642900),
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
                 fontWeight = FontWeight.Bold,
                 fontSize = 30.sp
             )
@@ -167,7 +169,7 @@ fun QuizTopAppBar(name :String) {
                     .padding(horizontal = 20.dp),
                 text = "Great to see you !",
                 textAlign = TextAlign.Start,
-                color = Color(0xff642900),
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
                 fontWeight = FontWeight.Normal,
                 fontSize = 20.sp
             )
@@ -232,7 +234,7 @@ fun CategoryItem(
                 text = category,
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color(0xff642900)
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
             )
             Icon(
                 modifier = Modifier.size(20.dp),

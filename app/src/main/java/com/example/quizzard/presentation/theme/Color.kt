@@ -2,10 +2,10 @@ package com.example.quizzard.presentation.theme
 
 import androidx.compose.ui.graphics.Color
 
-val md_theme_light_primary = Color(0xFF9B6006)
+val md_theme_light_primary = Color(0xFFF3BB81)
 val md_theme_light_onPrimary = Color(0xFFFFFFFF)
 val md_theme_light_primaryContainer = Color(0xFFffddba)
-val md_theme_light_onPrimaryContainer = Color(0xFF2b1700)
+val md_theme_light_onPrimaryContainer = Color(0xff642900)
 val md_theme_light_secondary = Color(0xFF875200)
 val md_theme_light_onSecondary = Color(0xFFFFFFFF)
 val md_theme_light_secondaryContainer = Color(0xFFffddba)
@@ -31,3 +31,6 @@ val md_theme_light_inversePrimary = Color(0xFFBAC3FF)
 val md_theme_light_surfaceTint = Color(0xFF4355B9)
 val md_theme_light_outlineVariant = Color(0xFFC7C5D0)
 val md_theme_light_scrim = Color(0xFF000000)
+
+val trueAnswer = Color(0xFF2E996D)
+val falseAnswer = Color(0xFFEB8844)

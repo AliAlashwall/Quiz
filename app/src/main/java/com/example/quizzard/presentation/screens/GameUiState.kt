@@ -13,4 +13,5 @@ data class GameUiState(
     var endQuiz : Boolean = false,
     var category : Subject = Subject.Empty,
     var questionListSize : Int = 10,
+    var itemIndexed : Int = 0
 )

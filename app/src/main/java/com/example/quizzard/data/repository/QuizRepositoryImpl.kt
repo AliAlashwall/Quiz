@@ -2,7 +2,7 @@ package com.example.quizzard.data.repository
 
 import com.example.quizzard.domain.model.QuizData
 import com.example.quizzard.domain.repository.QuizRepository
-import com.example.quizzard.data.data_source.QuizApiService
+import com.example.quizzard.data.data_source.remote.data_model.QuizApiService
 
 class QuizRepositoryImpl(private val quizApiService: QuizApiService) : QuizRepository {
     override suspend fun getComputerQuestions(): QuizData {

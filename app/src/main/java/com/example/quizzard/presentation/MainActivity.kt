@@ -1,4 +1,4 @@
-package com.example.quizzard
+package com.example.quizzard.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

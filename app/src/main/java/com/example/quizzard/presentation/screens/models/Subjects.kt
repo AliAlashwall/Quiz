@@ -1,4 +1,4 @@
-package com.example.quizzard.data
+package com.example.quizzard.presentation.screens.models
 
 enum class Subject {
     Math,

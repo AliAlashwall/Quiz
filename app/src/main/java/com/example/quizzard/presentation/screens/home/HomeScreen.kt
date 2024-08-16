@@ -54,7 +54,7 @@ import com.example.quizzard.presentation.screens.QuizUiState
 import com.example.quizzard.presentation.screens.QuizViewModel
 import com.example.quizzard.R
 import com.example.quizzard.domain.model.Question
-import com.example.quizzard.presentation.screens.GameUiState
+import com.example.quizzard.presentation.screens.models.GameUiState
 import com.example.quizzard.presentation.theme.QuizMasterTheme
 import com.example.quizzard.presentation.theme.falseAnswer
 import com.example.quizzard.presentation.theme.trueAnswer

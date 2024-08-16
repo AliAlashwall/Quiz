@@ -6,10 +6,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.quizzard.data.Subject
+import com.example.quizzard.presentation.screens.models.Subject
 import com.example.quizzard.domain.model.Question
 import com.example.quizzard.domain.model.QuizData
 import com.example.quizzard.domain.use_case.QuizUseCase
+import com.example.quizzard.presentation.screens.models.GameUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

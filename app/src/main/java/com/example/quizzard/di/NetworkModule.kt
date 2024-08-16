@@ -1,6 +1,6 @@
 package com.example.quizzard.di
 
-import com.example.quizzard.data.data_source.QuizApiService
+import com.example.quizzard.data.data_source.remote.data_model.QuizApiService
 import com.example.quizzard.data.repository.QuizRepositoryImpl
 import com.example.quizzard.domain.repository.QuizRepository
 import com.example.quizzard.domain.use_case.ComputerQuestionsUseCase
@@ -9,7 +9,7 @@ import com.example.quizzard.domain.use_case.HistoryQuestionsUseCase
 import com.example.quizzard.domain.use_case.MathQuestionsUseCase
 import com.example.quizzard.domain.use_case.SportsQuestionUseCase
 import com.example.quizzard.domain.use_case.QuizUseCase
-import com.example.quizzard.utils.Constants
+import com.example.quizzard.presentation.utils.Constants
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides

@@ -1,6 +1,4 @@
-package com.example.quizzard.presentation.screens
-
-import com.example.quizzard.data.Subject
+package com.example.quizzard.presentation.screens.models
 
 data class GameUiState(
     var userName : String = "",

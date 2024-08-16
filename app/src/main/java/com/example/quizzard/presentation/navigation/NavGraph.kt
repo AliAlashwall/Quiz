@@ -6,7 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.quizzard.presentation.screens.QuizViewModel
-import com.example.quizzard.presentation.screens.GameUiState
+import com.example.quizzard.presentation.screens.models.GameUiState
 import com.example.quizzard.presentation.screens.categorySelection.CategorySelection
 import com.example.quizzard.presentation.screens.finalScreen.FinalScreen
 import com.example.quizzard.presentation.screens.home.HomeScreen

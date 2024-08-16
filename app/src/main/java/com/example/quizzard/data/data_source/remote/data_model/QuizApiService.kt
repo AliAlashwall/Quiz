@@ -1,4 +1,4 @@
-package com.example.quizzard.data.data_source
+package com.example.quizzard.data.data_source.remote.data_model
 
 import com.example.quizzard.domain.model.QuizData
 import retrofit2.http.GET

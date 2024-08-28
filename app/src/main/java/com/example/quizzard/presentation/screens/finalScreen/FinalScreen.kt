@@ -17,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -30,11 +31,11 @@ import com.example.quizzard.presentation.theme.QuizMasterTheme
 
 @Composable
 fun FinalScreen(
-    userName : String,
+    userName: String,
     score: Int,
-    onTryAgainClicked : () -> Unit,
-    listSize : Int,
-    resetQuiz : () ->Unit
+    onTryAgainClicked: () -> Unit,
+    listSize: Int,
+    resetQuiz: () -> Unit
 ) {
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -43,16 +44,17 @@ fun FinalScreen(
     ) {
         LottieAnimationScore(score)
 
-        Text(modifier = Modifier.padding(vertical = 10.dp),
+        Text(
+            modifier = Modifier.padding(vertical = 10.dp),
             text = "Quiz Result",
-            fontSize =30.sp,
+            fontSize = 30.sp,
             fontWeight = FontWeight.Bold
         )
         Spacer(modifier = Modifier.height(100.dp))
 
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             LottieAnimationCeleb()
-            Column(horizontalAlignment = Alignment.CenterHorizontally){
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(
                     modifier = Modifier.padding(vertical = 20.dp),
                     text = "Name : $userName",
@@ -71,12 +73,12 @@ fun FinalScreen(
                         resetQuiz()
                     },
                     modifier = Modifier
-                        .padding(top = 60.dp, end = 50.dp, start = 50.dp, bottom = 20.dp)
+                        .padding(top = 60.dp, end = 16.dp, start = 16.dp, bottom = 20.dp)
                         .fillMaxWidth(),
                     colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary)
                 ) {
                     Text(
-                        text = "Try Again !",
+                        text = stringResource(R.string.try_again),
                         fontSize = 20.sp
                     )
                 }
@@ -91,16 +93,16 @@ fun FinalScreen(
 
 @Preview(showSystemUi = true)
 @Composable
-fun FinalPreview(){
-    QuizMasterTheme{
-        FinalScreen("Ali", 5,{},10) {
+fun FinalPreview() {
+    QuizMasterTheme {
+        FinalScreen("Ali", 5, {}, 10) {
         }
     }
 }
 
 
 @Composable
-fun LottieAnimationScore(score : Int) {
+fun LottieAnimationScore(score: Int) {
     val duration = if (score < 5) 0.55f else if (score in 5..7) 0.71f else 1f
     rememberLottieComposition(
         spec = LottieCompositionSpec.RawRes(R.raw.animation_score)
@@ -114,9 +116,10 @@ fun LottieAnimationScore(score : Int) {
             alignment = Alignment.Center,
 
 
-        )
+            )
     }
 }
+
 @Composable
 fun LottieAnimationCeleb() {
     rememberLottieComposition(

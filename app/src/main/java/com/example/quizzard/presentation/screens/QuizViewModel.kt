@@ -204,6 +204,5 @@ class QuizViewModel @Inject constructor(
             )
         }
     }
-
 }
 

@@ -24,36 +24,37 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.shapes
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.times
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieComposition
-import com.example.quizzard.presentation.screens.QuizUiState
-import com.example.quizzard.presentation.screens.QuizViewModel
 import com.example.quizzard.R
 import com.example.quizzard.domain.model.Question
+import com.example.quizzard.presentation.screens.QuizUiState
+import com.example.quizzard.presentation.screens.QuizViewModel
 import com.example.quizzard.presentation.screens.models.GameUiState
 import com.example.quizzard.presentation.theme.QuizMasterTheme
 import com.example.quizzard.presentation.theme.falseAnswer
@@ -61,9 +62,7 @@ import com.example.quizzard.presentation.theme.trueAnswer
 
 @Composable
 fun HomeScreen(
-    quizViewModel: QuizViewModel,
-    navToFinalScreen: () -> Unit,
-    navBack: () -> Unit
+    quizViewModel: QuizViewModel, navToFinalScreen: () -> Unit, navBack: () -> Unit
 ) {
 
     when (val quizUiState = quizViewModel.quizUiState) {
@@ -93,8 +92,7 @@ fun GameScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        GameLayout(
-            question = gameUiState.question,
+        GameLayout(question = gameUiState.question,
             quizViewModel = quizViewModel,
             gameUiState = gameUiState,
             listAnswer = gameUiState.listOfAnswer,
@@ -104,8 +102,7 @@ fun GameScreen(
             counter = gameUiState.counter,
             listSize = gameUiState.questionListSize,
             onNextClick = { quizViewModel.onNextClick(navToFinalScreen) },
-            navBack = { navBack() }
-        )
+            navBack = { navBack() })
     }
     BackHandler {
         // use only upper back button to back
@@ -118,7 +115,7 @@ fun GameLayout(
     question: String,
     quizViewModel: QuizViewModel,
     gameUiState: GameUiState,
-    listAnswer: List<Any>,
+    listAnswer: List<String>,
     correctAnswer: String,
     clicked: Boolean,
     score: Int,
@@ -130,8 +127,7 @@ fun GameLayout(
     val shuffledListAnswer = remember(listAnswer) { listAnswer.shuffled() }
     Log.v("MainActivity", correctAnswer)
     Column(
-        modifier = Modifier
-            .fillMaxSize(),
+        modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -153,13 +149,13 @@ fun GameLayout(
         Button(
             onClick = { onNextClick() },
             modifier = Modifier
-                .padding(top = 5.dp, bottom = 20.dp)
-                .width(280.dp),
+                .fillMaxWidth()
+                .padding(top = 5.dp, bottom = 20.dp, start = 16.dp, end = 16.dp),
+
             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary)
-        )
-        {
+        ) {
             Text(
-                text = "Next Question",
+                text = stringResource(R.string.next_question),
                 fontSize = 18.sp,
                 textAlign = TextAlign.Center
             )
@@ -170,9 +166,7 @@ fun GameLayout(
 
 @Composable
 fun QuestionCard(
-    question: String,
-    counter: Int,
-    listSize: Int
+    question: String, counter: Int, listSize: Int
 ) {
     var textSize by remember { mutableStateOf(20.sp) }
     if (question.length > 120) textSize = 18.sp else 20.sp
@@ -221,9 +215,9 @@ fun QuestionCard(
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun AnswerItem(
-    listAnswer: List<Any>,
+    listAnswer: List<String>,
     correctAnswer: String,
-    selectedAnswer: Any,
+    selectedAnswer: String,
     solved: Boolean,
     currentSelectedItem: Int,
     itemIndex: Int,
@@ -243,26 +237,22 @@ fun AnswerItem(
                     }
                 }
             },
-        colors =
-        if (solved && selectedAnswer == correctAnswer) {
+        colors = if (solved && selectedAnswer == correctAnswer) {
             CardDefaults.cardColors(trueAnswer)
+        } else if (solved && (itemIndex == currentSelectedItem)) {
+            CardDefaults.cardColors(falseAnswer)
         } else CardDefaults.cardColors(Color.Unspecified),
-        border =
-        if (solved && (selectedAnswer != correctAnswer) &&
-            (itemIndex == currentSelectedItem)) {
-            BorderStroke(1.dp, Color.Red)
-        } else BorderStroke(1.dp, Color.LightGray)
+        border = BorderStroke(1.dp, Color.LightGray)
     ) {
         Row(
-            modifier = Modifier.fillMaxSize(),
-            verticalAlignment = Alignment.CenterVertically
+            modifier = Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
                 text = "${(listAnswer.indexOf(selectedAnswer) + 1)}.",
                 Modifier.padding(horizontal = 10.dp)
             )
             Text(
-                text = selectedAnswer.toString(),
+                text = selectedAnswer,
                 Modifier.fillMaxWidth(),
             )
         }
@@ -271,7 +261,7 @@ fun AnswerItem(
 
 @Composable
 fun AnswersList(
-    listAnswer: List<Any>,
+    listAnswer: List<String>,
     correctAnswer: String,
     solved: Boolean,
     currentSelectedItem: Int,
@@ -313,10 +303,7 @@ fun LoadingScreen() {
 
 @Composable
 fun HomeTopAppBar(
-    category: String,
-    score: Int,
-    listSize: Int,
-    navBack: () -> Unit
+    category: String, score: Int, listSize: Int, navBack: () -> Unit
 ) {
     val fac = if (listSize == 10) 40.dp else 20.dp
     Column(
@@ -332,11 +319,9 @@ fun HomeTopAppBar(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start
         ) {
-            Icon(
-                painterResource(id = R.drawable.baseline_arrow_back_ios_24),
+            Icon(painterResource(id = R.drawable.baseline_arrow_back_ios_24),
                 null,
-                modifier = Modifier.clickable { navBack() }
-            )
+                modifier = Modifier.clickable { navBack() })
             Spacer(modifier = Modifier.weight(1f))
             Text(
                 text = "$category Quiz",
@@ -349,8 +334,7 @@ fun HomeTopAppBar(
         }
 
         Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Start
+            modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Start
         ) {
             when (score) {
                 in 0..10 -> StretchableLine(score * fac)
@@ -384,8 +368,7 @@ fun HomePreview() {
     QuizMasterTheme {
         val quizViewModel: QuizViewModel = viewModel()
         val gameUiState by quizViewModel.gameUiState.collectAsState()
-        GameLayout(
-            question = " hello ali",
+        GameLayout(question = " hello ali",
             quizViewModel = quizViewModel,
             gameUiState = gameUiState,
             listAnswer = gameUiState.listOfAnswer,
@@ -395,16 +378,14 @@ fun HomePreview() {
             counter = gameUiState.counter,
             listSize = 10,
             onNextClick = {},
-            {}
-        )
+            {})
 
     }
 }
 
 @Composable
 fun StretchableLine(
-    width: Dp = 40.dp,
-    color: Color = trueAnswer
+    width: Dp = 40.dp, color: Color = trueAnswer
 ) {
     Box(
         Modifier

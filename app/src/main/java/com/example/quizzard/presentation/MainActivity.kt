@@ -9,7 +9,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.quizzard.presentation.navigation.NavGraph
 import com.example.quizzard.presentation.screens.QuizViewModel
 import com.example.quizzard.presentation.theme.QuizMasterTheme
@@ -25,7 +25,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    val quizViewModel: QuizViewModel = viewModel()
+                    val quizViewModel: QuizViewModel = hiltViewModel()
                     val gameUiState by quizViewModel.gameUiState.collectAsState()
                     NavGraph(
                         quizViewModel = quizViewModel,

@@ -15,7 +15,6 @@ data class User(
     val username: String,
 
     @ColumnInfo(name = "scores")
-    @TypeConverters(Scores::class)
     val scores: List<Scores>
 )
 

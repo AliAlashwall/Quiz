@@ -31,7 +31,6 @@ class MainActivity : ComponentActivity() {
                         quizViewModel = quizViewModel,
                         gameUiState = gameUiState
                     )
-
                 }
             }
         }

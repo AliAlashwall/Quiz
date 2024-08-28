@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.quizzard.presentation.screens.models.Subject
 import com.example.quizzard.domain.model.Question
 import com.example.quizzard.domain.model.QuizData
-import com.example.quizzard.domain.use_case.QuizUseCase
+import com.example.quizzard.domain.use_case.remote.QuizUseCase
 import com.example.quizzard.presentation.screens.models.GameUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

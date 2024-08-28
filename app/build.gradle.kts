@@ -90,6 +90,12 @@ dependencies {
     // Jsoup
     implementation("org.jsoup:jsoup:1.14.2")
 
+    val roomVersion = "2.6.1" // Check for the latest version
+    kapt("androidx.room:room-compiler:$roomVersion")
+    implementation("androidx.room:room-runtime:$roomVersion")
+    implementation("androidx.room:room-ktx:$roomVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
+
     // Navigation
     implementation("androidx.navigation:navigation-compose:2.7.4")
 

@@ -1,4 +1,4 @@
-package com.example.quizzard.domain.use_case
+package com.example.quizzard.domain.use_case.remote
 
 data class QuizUseCase(
     val mathQuestionsUseCase: MathQuestionsUseCase,

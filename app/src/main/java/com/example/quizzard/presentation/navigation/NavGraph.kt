@@ -10,7 +10,7 @@ import com.example.quizzard.presentation.screens.models.GameUiState
 import com.example.quizzard.presentation.screens.categorySelection.CategorySelection
 import com.example.quizzard.presentation.screens.finalScreen.FinalScreen
 import com.example.quizzard.presentation.screens.home.HomeScreen
-import com.example.quizzard.presentation.screens.loginWithName.StartScreen
+import com.example.quizzard.presentation.screens.loginWithName.LoginWithNameScreen
 
 
 @Composable
@@ -26,7 +26,7 @@ fun NavGraph(
 
     ) {
         composable(route = Screens.Start.name) {
-            StartScreen(quizViewModel) {
+            LoginWithNameScreen(quizViewModel) {
                 navController.navigate(Screens.CategorySelection.name)
             }
         }

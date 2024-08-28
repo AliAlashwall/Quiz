@@ -38,9 +38,9 @@ import com.example.quizzard.presentation.screens.QuizViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun StartScreen(
+fun LoginWithNameScreen(
     quizViewModel: QuizViewModel = viewModel(),
-    onNextClicked : ()-> Unit,
+    onNextClicked: () -> Unit,
 ) {
     val gameUiState by quizViewModel.gameUiState.collectAsState()
 
@@ -50,21 +50,20 @@ fun StartScreen(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
-    ){
-            Row(
-                modifier = Modifier
-                    .padding(top = 60.dp, bottom = 160.dp)
-                    .size(200.dp),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ){
-                LottieAnimationExample()
-            }
-
+    ) {
+        Row(
+            modifier = Modifier
+                .padding(top = 60.dp, bottom = 160.dp)
+                .size(200.dp),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            LottieAnimationExample()
+        }
 
         OutlinedTextField(
             value = gameUiState.userName,
-            onValueChange = {name ->
+            onValueChange = { name ->
                 quizViewModel.updateUserName(name)
                 uName = name
             },
@@ -92,8 +91,7 @@ fun StartScreen(
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 50.dp, start = 16.dp, end = 16.dp)
-            ,
+                .padding(top = 50.dp, start = 16.dp, end = 16.dp),
             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary)
         ) {
             Text(text = stringResource(R.string.start_quiz))
@@ -103,8 +101,8 @@ fun StartScreen(
 
 @Preview(showSystemUi = true)
 @Composable
-fun StartPreview() {
-    StartScreen {}
+fun LoginWithNamePreview() {
+    LoginWithNameScreen {}
 }
 
 
@@ -115,10 +113,9 @@ fun LottieAnimationExample() {
     ).value.let { composition ->
         LottieAnimation(
             composition,
-            modifier = Modifier.
-                size(200.dp),
+            modifier = Modifier.size(200.dp),
             alignment = Alignment.Center,
             iterations = 1
-            )
+        )
     }
 }

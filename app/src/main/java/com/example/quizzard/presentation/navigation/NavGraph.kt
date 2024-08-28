@@ -19,7 +19,6 @@ fun NavGraph(
     quizViewModel: QuizViewModel,
     gameUiState: GameUiState
 ) {
-
     NavHost(
         navController = navController,
         startDestination = Screens.Start.name

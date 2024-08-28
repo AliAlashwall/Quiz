@@ -1,6 +1,5 @@
 package com.example.quizzard.presentation.screens
 
-import android.annotation.SuppressLint
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -39,11 +38,11 @@ class QuizViewModel @Inject constructor(
             val category = _gameUiState.value.category
             quizUiState = try {
                 when (category) {
-                    Subject.Math -> QuizUiState.Success(quizUseCase.mathQuestionsUseCase.invoke())
-                    Subject.Daily -> QuizUiState.Success(quizUseCase.dailyQuizUseCase.invoke())
-                    Subject.Programing -> QuizUiState.Success(quizUseCase.computerQuestionsUseCase.invoke())
-                    Subject.Sports -> QuizUiState.Success(quizUseCase.sportsQuestionUseCase.invoke())
-                    Subject.History -> QuizUiState.Success(quizUseCase.historyQuestionsUseCase.invoke())
+                    Subject.Math -> QuizUiState.Success(quizUseCase.mathQuestionsUseCase())
+                    Subject.Daily -> QuizUiState.Success(quizUseCase.dailyQuizUseCase())
+                    Subject.Programing -> QuizUiState.Success(quizUseCase.computerQuestionsUseCase())
+                    Subject.Sports -> QuizUiState.Success(quizUseCase.sportsQuestionUseCase())
+                    Subject.History -> QuizUiState.Success(quizUseCase.historyQuestionsUseCase())
                     else -> QuizUiState.Loading
                 }
             } catch (e: IOException) {
@@ -120,7 +119,6 @@ class QuizViewModel @Inject constructor(
         }
     }
 
-    @SuppressLint("SuspiciousIndentation")
     fun getQuestionDetails(questionsList: List<Question>) {
         val question = questionsList[_gameUiState.value.counter]
         _gameUiState.update {

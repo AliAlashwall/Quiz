@@ -7,14 +7,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.quizzard.domain.model.Question
 import com.example.quizzard.domain.use_case.remote.GetQuizQuestionsUseCase
-import com.example.quizzard.presentation.screens.models.QuizUiState
 import com.example.quizzard.presentation.screens.models.QuizDataState
+import com.example.quizzard.presentation.screens.models.QuizUiState
 import com.example.quizzard.presentation.screens.models.Subject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import okio.IOException
@@ -80,6 +79,7 @@ class QuizViewModel @Inject constructor(
     }
 
     fun getQuestionDetails(questionsList: List<Question>) {
+
         val question = questionsList[_quizUiState.value.counter]
         _quizUiState.update {
             it.copy(

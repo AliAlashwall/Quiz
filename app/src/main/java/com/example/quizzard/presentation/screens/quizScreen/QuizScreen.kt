@@ -1,5 +1,6 @@
 package com.example.quizzard.presentation.screens.quizScreen
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
@@ -30,6 +31,7 @@ import com.example.quizzard.domain.model.Question
 import com.example.quizzard.presentation.component.LoadingScreen
 import com.example.quizzard.presentation.screens.QuizViewModel
 import com.example.quizzard.presentation.screens.models.QuizDataState
+import com.example.quizzard.presentation.screens.models.QuizUiState
 import com.example.quizzard.presentation.screens.quizScreen.component.AnswerItem
 import com.example.quizzard.presentation.screens.quizScreen.component.HomeTopAppBar
 import com.example.quizzard.presentation.screens.quizScreen.component.QuestionCard
@@ -38,10 +40,12 @@ import com.example.quizzard.presentation.screens.quizScreen.component.QuestionCa
 fun QuizScreen(
     quizViewModel: QuizViewModel, navToFinalScreen: () -> Unit, navBack: () -> Unit
 ) {
-    when (val quizUiState = quizViewModel.quizDataState) {
+    val quizUiState by quizViewModel.quizUiState.collectAsState()
+
+    when (val quizDataState = quizViewModel.quizDataState) {
         is QuizDataState.Success -> {
             QuizScreenContent(
-                quizUiState.question.results, quizViewModel, navToFinalScreen
+                quizDataState.question.results, quizUiState, quizViewModel, navToFinalScreen
             ) {
                 quizViewModel.backToHome()
                 navBack()
@@ -53,17 +57,18 @@ fun QuizScreen(
     }
 }
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun QuizScreenContent(
     questionList: List<Question>,
+    quizUiState: QuizUiState,
     quizViewModel: QuizViewModel,
     navToFinalScreen: () -> Unit,
     navBack: () -> Unit
 ) {
-    LaunchedEffect(Unit) {
+    LaunchedEffect(key1 = quizUiState) {
         quizViewModel.getQuestionDetails(questionList)
     }
-    val quizUiState by quizViewModel.quizUiState.collectAsState()
     val shuffledListAnswer =
         remember(quizUiState.listOfAnswer) { quizUiState.listOfAnswer.shuffled() }
 
@@ -82,7 +87,7 @@ fun QuizScreenContent(
 
         QuestionCard(quizUiState.question, quizUiState.counter, quizUiState.questionListSize)
 
-        Spacer(modifier = Modifier.weight(1f)/*height(25.dp)*/)
+        Spacer(modifier = Modifier.weight(1f))
 
         AnswersList(
             listAnswer = shuffledListAnswer,

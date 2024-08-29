@@ -50,10 +50,12 @@ fun CategorySelection(
                 .align(Alignment.Start),
             text = stringResource(R.string.practice_more),
             fontWeight = FontWeight.Bold
-
         )
 
-        DailyQuizItem { quizViewModel.onSubjectClicked(Subject.Daily) }
+        DailyQuizItem {
+            quizViewModel.onSubjectClicked(Subject.Daily)
+            navToQuiz()
+        }
 
 
         Spacer(modifier = Modifier.height(30.dp))

@@ -43,7 +43,7 @@ fun FinalScreen(
 
         Text(
             modifier = Modifier.padding(vertical = 10.dp),
-            text = "Quiz Result",
+            text = stringResource(R.string.quiz_result),
             fontSize = 30.sp,
             fontWeight = FontWeight.Bold
         )

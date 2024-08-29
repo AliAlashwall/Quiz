@@ -26,10 +26,10 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val quizViewModel: QuizViewModel = hiltViewModel()
-                    val gameUiState by quizViewModel.gameUiState.collectAsState()
+                    val quizUiState by quizViewModel.quizUiState.collectAsState()
                     NavGraph(
                         quizViewModel = quizViewModel,
-                        gameUiState = gameUiState
+                        quizUiState = quizUiState
                     )
                 }
             }

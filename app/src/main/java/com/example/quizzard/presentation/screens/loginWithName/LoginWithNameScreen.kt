@@ -29,20 +29,17 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.airbnb.lottie.compose.LottieAnimation
-import com.airbnb.lottie.compose.LottieCompositionSpec
-import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.quizzard.R
 import com.example.quizzard.presentation.screens.QuizViewModel
-
+import com.example.quizzard.presentation.screens.loginWithName.component.LottieAnimationIntro
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginWithNameScreen(
-    quizViewModel: QuizViewModel = viewModel(),
+    quizViewModel: QuizViewModel,
     onNextClicked: () -> Unit,
 ) {
-    val gameUiState by quizViewModel.gameUiState.collectAsState()
+    val quizUiState by quizViewModel.quizUiState.collectAsState()
 
     val focusManager = LocalFocusManager.current
     var uName by remember { mutableStateOf("") }
@@ -58,11 +55,11 @@ fun LoginWithNameScreen(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            LottieAnimationExample()
+            LottieAnimationIntro()
         }
 
         OutlinedTextField(
-            value = gameUiState.userName,
+            value = quizUiState.userName,
             onValueChange = { name ->
                 quizViewModel.updateUserName(name)
                 uName = name
@@ -102,20 +99,6 @@ fun LoginWithNameScreen(
 @Preview(showSystemUi = true)
 @Composable
 fun LoginWithNamePreview() {
-    LoginWithNameScreen {}
-}
-
-
-@Composable
-fun LottieAnimationExample() {
-    rememberLottieComposition(
-        spec = LottieCompositionSpec.RawRes(R.raw.animation_lnudoydi)
-    ).value.let { composition ->
-        LottieAnimation(
-            composition,
-            modifier = Modifier.size(200.dp),
-            alignment = Alignment.Center,
-            iterations = 1
-        )
-    }
+    val vm = viewModel<QuizViewModel>()
+    LoginWithNameScreen (vm){}
 }

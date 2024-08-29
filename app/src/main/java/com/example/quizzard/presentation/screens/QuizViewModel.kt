@@ -7,7 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.quizzard.domain.model.Question
 import com.example.quizzard.domain.use_case.remote.GetQuizQuestionsUseCase
-import com.example.quizzard.presentation.screens.models.GameUiState
+import com.example.quizzard.presentation.screens.models.QuizUiState
+import com.example.quizzard.presentation.screens.models.QuizDataState
 import com.example.quizzard.presentation.screens.models.Subject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -26,43 +27,43 @@ class QuizViewModel @Inject constructor(
     private val quizUseCase: GetQuizQuestionsUseCase
 ) : ViewModel() {
 
-    var quizUiState: QuizUiState by mutableStateOf(QuizUiState.Loading)
+    var quizDataState: QuizDataState by mutableStateOf(QuizDataState.Loading)
         private set
 
-    private val _gameUiState = MutableStateFlow(GameUiState())
-    val gameUiState: StateFlow<GameUiState> = _gameUiState.asStateFlow()
+    private val _quizUiState = MutableStateFlow(QuizUiState())
+    val quizUiState: StateFlow<QuizUiState> = _quizUiState
 
-    private suspend fun handleResponse(amount: Int, category: Int): QuizUiState {
+    private suspend fun handleResponse(amount: Int, category: Int): QuizDataState {
         return quizUseCase(amount = amount, category = category).let {
             if (it.isSuccessful) {
-                QuizUiState.Success(it.body()!!)
+                QuizDataState.Success(it.body()!!)
             } else {
-                QuizUiState.Error(it.errorBody().toString())
+                QuizDataState.Error(it.errorBody().toString())
             }
         }
     }
 
     private fun getQuestion() {
         viewModelScope.launch(Dispatchers.IO) {
-            val category = _gameUiState.value.category
-            quizUiState = try {
+            val category = _quizUiState.value.category
+            quizDataState = try {
                 when (category) {
                     Subject.Daily -> handleResponse(amount = 20, category = 0)
                     Subject.Programing -> handleResponse(amount = 10, category = 10)
                     Subject.Math -> handleResponse(amount = 10, category = 19)
                     Subject.Sports -> handleResponse(amount = 10, category = 21)
                     Subject.History -> handleResponse(amount = 10, category = 23)
-                    else -> QuizUiState.Loading
+                    else -> QuizDataState.Loading
                 }
             } catch (e: IOException) {
-                QuizUiState.Error("Network Error")
+                QuizDataState.Error("Network Error")
             }
         }
     }
 
 
     fun onSubjectClicked(category: Subject) {
-        _gameUiState.update {
+        _quizUiState.update {
             it.copy(
                 category = category
             )
@@ -71,7 +72,7 @@ class QuizViewModel @Inject constructor(
     }
 
     fun updateUserName(name: String) {
-        _gameUiState.update {
+        _quizUiState.update {
             it.copy(
                 userName = name
             )
@@ -79,8 +80,8 @@ class QuizViewModel @Inject constructor(
     }
 
     fun getQuestionDetails(questionsList: List<Question>) {
-        val question = questionsList[_gameUiState.value.counter]
-        _gameUiState.update {
+        val question = questionsList[_quizUiState.value.counter]
+        _quizUiState.update {
             it.copy(
                 question = Jsoup.parse(question.question).text(),
                 listOfAnswer = (question.incorrectAnswers + question.correctAnswer).map { answer ->
@@ -95,13 +96,13 @@ class QuizViewModel @Inject constructor(
     }
 
     fun onNextClick(navToEnd: () -> Unit) {
-        var incCounter = _gameUiState.value.counter.plus(1)
-        val listSize = _gameUiState.value.questionListSize
+        var incCounter = _quizUiState.value.counter.plus(1)
+        val listSize = _quizUiState.value.questionListSize
         if (incCounter == listSize) {
             incCounter = (listSize - 1)
         }
-        val endGame = _gameUiState.value.counter == listSize - 1
-        _gameUiState.update {
+        val endGame = _quizUiState.value.counter == listSize - 1
+        _quizUiState.update {
             it.copy(
                 clicked = false,
                 counter = incCounter,
@@ -114,7 +115,7 @@ class QuizViewModel @Inject constructor(
     }
 
     fun backToHome() {
-        _gameUiState.update {
+        _quizUiState.update {
             it.copy(
                 clicked = false,
                 score = 0,
@@ -128,7 +129,7 @@ class QuizViewModel @Inject constructor(
     }
 
     fun onItemClicked(index: Int) {
-        _gameUiState.update {
+        _quizUiState.update {
             it.copy(
                 clicked = true,
                 itemIndexed = index
@@ -137,8 +138,8 @@ class QuizViewModel @Inject constructor(
     }
 
     fun incScore() {
-        val newScore = _gameUiState.value.score.plus(1)
-        _gameUiState.update {
+        val newScore = _quizUiState.value.score.plus(1)
+        _quizUiState.update {
             it.copy(
                 score = newScore
             )
@@ -146,7 +147,7 @@ class QuizViewModel @Inject constructor(
     }
 
     fun resetGame() {
-        _gameUiState.update {
+        _quizUiState.update {
             it.copy(
                 userName = "",
                 clicked = false,

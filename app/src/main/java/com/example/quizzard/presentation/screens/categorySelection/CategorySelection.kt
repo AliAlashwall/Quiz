@@ -30,10 +30,10 @@ import com.example.quizzard.presentation.theme.QuizMasterTheme
 
 @Composable
 fun CategorySelection(
-    gameViewModel: QuizViewModel,
+    quizViewModel: QuizViewModel,
     navToQuiz: () -> Unit
 ) {
-    val gameUiState by gameViewModel.gameUiState.collectAsState()
+    val quizUiState by quizViewModel.quizUiState.collectAsState()
     Column(
         Modifier
             .fillMaxSize()
@@ -41,7 +41,7 @@ fun CategorySelection(
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        CategoryTopAppBar(name = gameUiState.userName)
+        CategoryTopAppBar(name = quizUiState.userName)
 
         Text(
             modifier = Modifier
@@ -53,7 +53,7 @@ fun CategorySelection(
 
         )
 
-        DailyQuizItem { gameViewModel.onSubjectClicked(Subject.Daily) }
+        DailyQuizItem { quizViewModel.onSubjectClicked(Subject.Daily) }
 
 
         Spacer(modifier = Modifier.height(30.dp))
@@ -69,7 +69,7 @@ fun CategorySelection(
             category = stringResource(R.string.sports),
             classNum = "A",
             onCategoryClicked = {
-                gameViewModel.onSubjectClicked(Subject.Sports)
+                quizViewModel.onSubjectClicked(Subject.Sports)
                 navToQuiz()
             },
         )
@@ -77,7 +77,7 @@ fun CategorySelection(
             category = stringResource(R.string.programing),
             classNum = "B",
             onCategoryClicked = {
-                gameViewModel.onSubjectClicked(Subject.Programing)
+                quizViewModel.onSubjectClicked(Subject.Programing)
                 navToQuiz()
             },
         )
@@ -85,7 +85,7 @@ fun CategorySelection(
             category = stringResource(R.string.math),
             classNum = "C",
             onCategoryClicked = {
-                gameViewModel.onSubjectClicked(Subject.Math)
+                quizViewModel.onSubjectClicked(Subject.Math)
                 navToQuiz()
             },
         )
@@ -93,7 +93,7 @@ fun CategorySelection(
             category = stringResource(R.string.history),
             classNum = "D",
             onCategoryClicked = {
-                gameViewModel.onSubjectClicked(Subject.History)
+                quizViewModel.onSubjectClicked(Subject.History)
                 navToQuiz()
             },
         )
@@ -103,9 +103,9 @@ fun CategorySelection(
 
 @Preview(showSystemUi = true)
 @Composable
-fun CategorySelctionPrev() {
+fun CategorySelectionPrev() {
     QuizMasterTheme {
-        val gameViewModel: QuizViewModel = viewModel()
-        CategorySelection(gameViewModel) {}
+        val quizViewModel: QuizViewModel = viewModel()
+        CategorySelection(quizViewModel) {}
     }
 }

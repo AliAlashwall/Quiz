@@ -1,6 +1,6 @@
 package com.example.quizzard.presentation.screens.models
 
-data class GameUiState(
+data class QuizUiState(
     var userName : String = "",
     var clicked : Boolean = false,
     var score : Int = 0,

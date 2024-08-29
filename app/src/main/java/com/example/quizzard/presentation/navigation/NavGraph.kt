@@ -6,7 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.quizzard.presentation.screens.QuizViewModel
-import com.example.quizzard.presentation.screens.models.GameUiState
+import com.example.quizzard.presentation.screens.models.QuizUiState
 import com.example.quizzard.presentation.screens.categorySelection.CategorySelection
 import com.example.quizzard.presentation.screens.finalScreen.FinalScreen
 import com.example.quizzard.presentation.screens.quizScreen.QuizScreen
@@ -17,7 +17,7 @@ import com.example.quizzard.presentation.screens.loginWithName.LoginWithNameScre
 fun NavGraph(
     navController: NavHostController = rememberNavController(),
     quizViewModel: QuizViewModel,
-    gameUiState: GameUiState
+    quizUiState: QuizUiState
 ) {
     NavHost(
         navController = navController,
@@ -49,10 +49,10 @@ fun NavGraph(
         }
         composable(route = Screens.Final.name) {
             FinalScreen(
-                userName = gameUiState.userName,
-                score = gameUiState.score,
+                userName = quizUiState.userName,
+                score = quizUiState.score,
                 onTryAgainClicked = { navController.popBackStack(Screens.Start.name, false) },
-                listSize = gameUiState.questionListSize,
+                listSize = quizUiState.questionListSize,
                 resetQuiz = { quizViewModel.resetGame() }
             )
         }

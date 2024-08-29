@@ -1,6 +1,5 @@
 package com.example.quizzard.presentation.screens.quizScreen
 
-import android.annotation.SuppressLint
 import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
@@ -29,8 +28,8 @@ import androidx.compose.ui.unit.sp
 import com.example.quizzard.R
 import com.example.quizzard.domain.model.Question
 import com.example.quizzard.presentation.component.LoadingScreen
-import com.example.quizzard.presentation.screens.QuizUiState
 import com.example.quizzard.presentation.screens.QuizViewModel
+import com.example.quizzard.presentation.screens.models.QuizDataState
 import com.example.quizzard.presentation.screens.quizScreen.component.AnswerItem
 import com.example.quizzard.presentation.screens.quizScreen.component.HomeTopAppBar
 import com.example.quizzard.presentation.screens.quizScreen.component.QuestionCard
@@ -39,8 +38,8 @@ import com.example.quizzard.presentation.screens.quizScreen.component.QuestionCa
 fun QuizScreen(
     quizViewModel: QuizViewModel, navToFinalScreen: () -> Unit, navBack: () -> Unit
 ) {
-    when (val quizUiState = quizViewModel.quizUiState) {
-        is QuizUiState.Success -> {
+    when (val quizUiState = quizViewModel.quizDataState) {
+        is QuizDataState.Success -> {
             QuizScreenContent(
                 quizUiState.question.results, quizViewModel, navToFinalScreen
             ) {
@@ -49,12 +48,11 @@ fun QuizScreen(
             }
         }
 
-        is QuizUiState.Loading -> LoadingScreen()
-        is QuizUiState.Error -> {}
+        is QuizDataState.Loading -> LoadingScreen()
+        is QuizDataState.Error -> {}
     }
 }
 
-@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun QuizScreenContent(
     questionList: List<Question>,
@@ -65,34 +63,34 @@ fun QuizScreenContent(
     LaunchedEffect(Unit) {
         quizViewModel.getQuestionDetails(questionList)
     }
-    val gameUiState by quizViewModel.gameUiState.collectAsState()
+    val quizUiState by quizViewModel.quizUiState.collectAsState()
     val shuffledListAnswer =
-        remember(gameUiState.listOfAnswer) { gameUiState.listOfAnswer.shuffled() }
+        remember(quizUiState.listOfAnswer) { quizUiState.listOfAnswer.shuffled() }
 
-    Log.v("MainActivity", gameUiState.correctAnswer)
+    Log.v("MainActivity", quizUiState.correctAnswer)
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         HomeTopAppBar(
-            "${gameUiState.category}",
-            gameUiState.score,
-            gameUiState.questionListSize,
+            "${quizUiState.category}",
+            quizUiState.score,
+            quizUiState.questionListSize,
             navBack
         )
 
-        QuestionCard(gameUiState.question, gameUiState.counter, gameUiState.questionListSize)
+        QuestionCard(quizUiState.question, quizUiState.counter, quizUiState.questionListSize)
 
         Spacer(modifier = Modifier.weight(1f)/*height(25.dp)*/)
 
         AnswersList(
             listAnswer = shuffledListAnswer,
-            correctAnswer = gameUiState.correctAnswer,
-            solved = gameUiState.clicked,
+            correctAnswer = quizUiState.correctAnswer,
+            solved = quizUiState.clicked,
             onItemClicked = { quizViewModel.onItemClicked(it) },
             incScore = { quizViewModel.incScore() },
-            currentSelectedItem = quizViewModel.gameUiState.value.itemIndexed
+            currentSelectedItem = quizViewModel.quizUiState.value.itemIndexed
         )
         Spacer(modifier = Modifier.weight(1f))
         Button(

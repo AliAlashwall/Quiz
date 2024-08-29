@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
@@ -22,11 +21,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.airbnb.lottie.compose.LottieAnimation
-import com.airbnb.lottie.compose.LottieClipSpec
-import com.airbnb.lottie.compose.LottieCompositionSpec
-import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.quizzard.R
+import com.example.quizzard.presentation.screens.finalScreen.component.LottieAnimationCeleb
+import com.example.quizzard.presentation.screens.finalScreen.component.LottieAnimationScore
 import com.example.quizzard.presentation.theme.QuizMasterTheme
 
 @Composable
@@ -54,6 +51,7 @@ fun FinalScreen(
 
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             LottieAnimationCeleb()
+
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(
                     modifier = Modifier.padding(vertical = 20.dp),
@@ -97,39 +95,5 @@ fun FinalPreview() {
     QuizMasterTheme {
         FinalScreen("Ali", 5, {}, 10) {
         }
-    }
-}
-
-
-@Composable
-fun LottieAnimationScore(score: Int) {
-    val duration = if (score < 5) 0.55f else if (score in 5..7) 0.71f else 1f
-    rememberLottieComposition(
-        spec = LottieCompositionSpec.RawRes(R.raw.animation_score)
-    ).value.let { composition ->
-        LottieAnimation(
-            composition,
-            clipSpec = LottieClipSpec.Progress(max = duration),
-            modifier = Modifier
-                .padding(top = 40.dp)
-                .size(250.dp),
-            alignment = Alignment.Center,
-
-
-            )
-    }
-}
-
-@Composable
-fun LottieAnimationCeleb() {
-    rememberLottieComposition(
-        spec = LottieCompositionSpec.RawRes(R.raw.celebration_animation)
-    ).value.let { composition ->
-        LottieAnimation(
-            composition,
-            modifier = Modifier.size(250.dp),
-            alignment = Alignment.Center,
-            iterations = 1
-        )
     }
 }

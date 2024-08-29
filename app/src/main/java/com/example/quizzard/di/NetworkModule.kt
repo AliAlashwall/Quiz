@@ -3,12 +3,6 @@ package com.example.quizzard.di
 import com.example.quizzard.data.data_source.remote.data_model.QuizApiService
 import com.example.quizzard.data.repository.RemoteQuizRepositoryImpl
 import com.example.quizzard.domain.repository.RemoteQuizRepository
-import com.example.quizzard.domain.use_case.remote.ComputerQuestionsUseCase
-import com.example.quizzard.domain.use_case.remote.DailyQuizUseCase
-import com.example.quizzard.domain.use_case.remote.HistoryQuestionsUseCase
-import com.example.quizzard.domain.use_case.remote.MathQuestionsUseCase
-import com.example.quizzard.domain.use_case.remote.SportsQuestionUseCase
-import com.example.quizzard.domain.use_case.remote.QuizUseCase
 import com.example.quizzard.presentation.utils.Constants
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
@@ -55,18 +49,5 @@ object NetworkModule {
     @Singleton
     fun provideQuizRepository(quizApiService: QuizApiService): RemoteQuizRepository {
         return RemoteQuizRepositoryImpl(quizApiService)
-    }
-
-    @Provides
-    @Singleton
-    fun provideSubjectQuestionUseCase(remoteQuizRepository: RemoteQuizRepository): QuizUseCase {
-        return QuizUseCase(
-            mathQuestionsUseCase = MathQuestionsUseCase(remoteQuizRepository),
-            computerQuestionsUseCase = ComputerQuestionsUseCase(remoteQuizRepository),
-            sportsQuestionUseCase = SportsQuestionUseCase(remoteQuizRepository),
-            historyQuestionsUseCase = HistoryQuestionsUseCase(remoteQuizRepository),
-            dailyQuizUseCase = DailyQuizUseCase(remoteQuizRepository),
-        )
-
     }
 }

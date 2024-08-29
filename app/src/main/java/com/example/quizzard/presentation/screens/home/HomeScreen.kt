@@ -68,7 +68,10 @@ fun HomeScreen(
     when (val quizUiState = quizViewModel.quizUiState) {
         is QuizUiState.Success -> GameScreen(
             quizUiState.question.results, quizViewModel, navToFinalScreen
-        ) { quizViewModel.backToHome { navBack() } }
+        ) {
+            quizViewModel.backToHome()
+            navBack()
+        }
 
         is QuizUiState.Loading -> LoadingScreen()
     }

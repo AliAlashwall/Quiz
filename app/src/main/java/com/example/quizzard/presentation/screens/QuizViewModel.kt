@@ -5,12 +5,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.quizzard.presentation.screens.models.Subject
 import com.example.quizzard.domain.model.Question
 import com.example.quizzard.domain.model.QuizData
-import com.example.quizzard.domain.use_case.remote.QuizUseCase
+import com.example.quizzard.domain.use_case.remote.GetQuizQuestionsUseCase
 import com.example.quizzard.presentation.screens.models.GameUiState
+import com.example.quizzard.presentation.screens.models.Subject
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -23,33 +24,14 @@ import javax.inject.Inject
 interface QuizUiState {
     data class Success(val question: QuizData) : QuizUiState
     object Loading : QuizUiState
-    object Error : QuizUiState
+    data class Error(val message: String) : QuizUiState
 
 }
 
 @HiltViewModel
 class QuizViewModel @Inject constructor(
-    private val quizUseCase: QuizUseCase
+    private val quizUseCase: GetQuizQuestionsUseCase
 ) : ViewModel() {
-
-    private fun getQuestion() {
-        viewModelScope.launch {
-
-            val category = _gameUiState.value.category
-            quizUiState = try {
-                when (category) {
-                    Subject.Math -> QuizUiState.Success(quizUseCase.mathQuestionsUseCase())
-                    Subject.Daily -> QuizUiState.Success(quizUseCase.dailyQuizUseCase())
-                    Subject.Programing -> QuizUiState.Success(quizUseCase.computerQuestionsUseCase())
-                    Subject.Sports -> QuizUiState.Success(quizUseCase.sportsQuestionUseCase())
-                    Subject.History -> QuizUiState.Success(quizUseCase.historyQuestionsUseCase())
-                    else -> QuizUiState.Loading
-                }
-            } catch (e: IOException) {
-                QuizUiState.Error
-            }
-        }
-    }
 
     var quizUiState: QuizUiState by mutableStateOf(QuizUiState.Loading)
         private set
@@ -57,58 +39,42 @@ class QuizViewModel @Inject constructor(
     private val _gameUiState = MutableStateFlow(GameUiState())
     val gameUiState: StateFlow<GameUiState> = _gameUiState.asStateFlow()
 
-    fun onSportClicked(navToHome: () -> Unit) {
-        _gameUiState.update {
-            it.copy(
-                category = Subject.Sports
-            )
-        }
-        getQuestion()
-        navToHome()
-    }
-
-    fun onComputerClicked(navToHome: () -> Unit) {
-        _gameUiState.update {
-            it.copy(
-                category = Subject.Programing
-            )
-        }
-        getQuestion()
-        navToHome()
-    }
-
-    fun onMathClicked(navToHome: () -> Unit) {
-        _gameUiState.update {
-            it.copy(
-                category = Subject.Math
-            )
-        }
-        getQuestion()
-        navToHome()
-    }
-
-    fun onDailyQuizClicked(navToHome: () -> Unit) {
-        viewModelScope.launch {
-            _gameUiState.update {
-                it.copy(
-                    category = Subject.Daily
-                )
+    private suspend fun handleResponse(amount: Int, category: Int): QuizUiState {
+        return quizUseCase(amount = amount, category = category).let {
+            if (it.isSuccessful) {
+                QuizUiState.Success(it.body()!!)
+            } else {
+                QuizUiState.Error(it.errorBody().toString())
             }
-            getQuestion()
-            navToHome()
         }
     }
 
-    fun onHistoryClicked(navToHome: () -> Unit) {
-        viewModelScope.launch {
-            _gameUiState.update {
-                it.copy(
-                    category = Subject.History
-                )
+    private fun getQuestion() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val category = _gameUiState.value.category
+            quizUiState = try {
+                when (category) {
+                    Subject.Daily -> handleResponse(amount = 20, category = 0)
+                    Subject.Programing -> handleResponse(amount = 10, category = 10)
+                    Subject.Math -> handleResponse(amount = 10, category = 19)
+                    Subject.Sports -> handleResponse(amount = 10, category = 21)
+                    Subject.History -> handleResponse(amount = 10, category = 23)
+                    else -> QuizUiState.Loading
+                }
+            } catch (e: IOException) {
+                QuizUiState.Error("Network Error")
             }
-            getQuestion()
-            navToHome()
         }
+    }
+
+
+    fun onSubjectClicked(category: Subject) {
+        _gameUiState.update {
+            it.copy(
+                category = category
+            )
+        }
+        getQuestion()
     }
 
     fun updateUserName(name: String) {
@@ -154,7 +120,7 @@ class QuizViewModel @Inject constructor(
         }
     }
 
-    fun backToHome(navToHome: () -> Unit) {
+    fun backToHome() {
         _gameUiState.update {
             it.copy(
                 clicked = false,
@@ -166,10 +132,9 @@ class QuizViewModel @Inject constructor(
                 endQuiz = false,
             )
         }
-        navToHome()
     }
 
-    fun onItemClicked(index : Int) {
+    fun onItemClicked(index: Int) {
         _gameUiState.update {
             it.copy(
                 clicked = true,

@@ -6,7 +6,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.quizzard.domain.model.Question
-import com.example.quizzard.domain.model.QuizData
 import com.example.quizzard.domain.use_case.remote.GetQuizQuestionsUseCase
 import com.example.quizzard.presentation.screens.models.GameUiState
 import com.example.quizzard.presentation.screens.models.Subject
@@ -21,12 +20,6 @@ import okio.IOException
 import org.jsoup.Jsoup
 import javax.inject.Inject
 
-interface QuizUiState {
-    data class Success(val question: QuizData) : QuizUiState
-    object Loading : QuizUiState
-    data class Error(val message: String) : QuizUiState
-
-}
 
 @HiltViewModel
 class QuizViewModel @Inject constructor(

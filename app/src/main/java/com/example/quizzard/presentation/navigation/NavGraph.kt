@@ -9,7 +9,7 @@ import com.example.quizzard.presentation.screens.QuizViewModel
 import com.example.quizzard.presentation.screens.models.GameUiState
 import com.example.quizzard.presentation.screens.categorySelection.CategorySelection
 import com.example.quizzard.presentation.screens.finalScreen.FinalScreen
-import com.example.quizzard.presentation.screens.home.HomeScreen
+import com.example.quizzard.presentation.screens.quizScreen.QuizScreen
 import com.example.quizzard.presentation.screens.loginWithName.LoginWithNameScreen
 
 
@@ -35,16 +35,15 @@ fun NavGraph(
             }
         }
         composable(route = Screens.Home.name) {
-            HomeScreen(
+            QuizScreen(
                 quizViewModel = quizViewModel,
                 navToFinalScreen = { navController.navigate(Screens.Final.name) },
                 navBack = {
-                    quizViewModel.backToHome {
-                        navController.popBackStack(
-                            Screens.CategorySelection.name,
-                            false
-                        )
-                    }
+                    quizViewModel.backToHome()
+                    navController.popBackStack(
+                        Screens.CategorySelection.name,
+                        false
+                    )
                 }
             )
         }
